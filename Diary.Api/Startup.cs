@@ -26,6 +26,8 @@ namespace Diary.Api {
 		{
 			loggerFactory.AddConsole();
 
+			MainStartup.Initialize();
+
 			if (env.IsDevelopment()) {
 				app.UseDeveloperExceptionPage();
 			}

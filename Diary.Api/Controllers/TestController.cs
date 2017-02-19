@@ -1,4 +1,6 @@
 ﻿using System;
+using Diary.Main.Core.Persistence;
+using Diary.Main.Domain.Entities;
 using Diary.Main.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,10 +13,15 @@ namespace Diary.Api.Controllers {
 
 		public TestController(IHiService hiService) { this._hiService = hiService; }
 
-		// GET: api/values
 		[HttpGet]
 		public String Get()
 		{
+			using (var db = new DiaryContext()) {
+				var blog = new Entry {Title = "Test entry"};
+				db.Entries.Add(blog);
+				db.SaveChanges();
+			}
+
 			var text = this._hiService.SayHi();
 			return text;
 		}
