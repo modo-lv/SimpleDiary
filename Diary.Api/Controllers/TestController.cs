@@ -1,46 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Diary.Main.Services;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace Diary.Api.Controllers
-{
-    [Route("api/[controller]")]
-    public class TestController : Controller
-    {
-        // GET: api/values
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
+namespace Diary.Api.Controllers {
+	[Route("api/[controller]")]
+	public class TestController : Controller {
+		private readonly IHiService _hiService;
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
+		public TestController(IHiService hiService) { this._hiService = hiService; }
 
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
-    }
+		// GET: api/values
+		[HttpGet]
+		public String Get()
+		{
+			var text = this._hiService.SayHi();
+			return text;
+		}
+	}
 }
