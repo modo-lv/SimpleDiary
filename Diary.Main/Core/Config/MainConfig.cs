@@ -1,4 +1,5 @@
 ﻿using System;
+using Newtonsoft.Json;
 using Simpler.Net.FileSystem;
 
 namespace Diary.Main.Core.Config
@@ -9,14 +10,26 @@ namespace Diary.Main.Core.Config
 	public class MainConfig
 	{
 		/// <summary>
-		/// Full path (can be relative to the app folder) to where the
+		/// Filename used for DB storage.
 		/// </summary>
-		public String DbFilePath { get; set; }
+		public String DbFile { get; set; }
 
 		/// <summary>
-		/// Directory path where files (images, videos, etc.) are kept.
+		/// Full path to the DB file.
 		/// </summary>
-		public String FileStorageDir { get; set; }
+		[JsonIgnore]
+		public String DbFilePath => SimplerPath.Combine(DiaryConfig.BaseDir, this.DbFile);
+
+		/// <summary>
+		/// Folder where diary files (images, videos, etc.) are kept.
+		/// </summary>
+		public String FileStorageFolder { get; set; }
+
+		/// <summary>
+		/// Full path to the file storage folder.
+		/// </summary>
+		[JsonIgnore]
+		public String FileStorageDir => SimplerPath.Combine(DiaryConfig.BaseDir, this.FileStorageFolder);
 
 
 		/// <summary>
@@ -24,9 +37,9 @@ namespace Diary.Main.Core.Config
 		/// </summary>
 		public MainConfig()
 		{
-			this.DbFilePath = SimplerPath.Combine(DiaryConfig.BaseDir, "diary.db");
+			this.DbFile = "diary.db";
 
-			this.FileStorageDir = SimplerPath.Combine(DiaryConfig.BaseDir, "diary.files");
+			this.FileStorageFolder = "diary.files";
 		}
 	}
 }

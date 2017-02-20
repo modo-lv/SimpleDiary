@@ -16,7 +16,7 @@ namespace Diary.Main.Core.Persistence {
 		{
 			base.OnConfiguring(optionsBuilder);
 
-			optionsBuilder.UseSqlite($"Data Source={this._config.DbFilePath}");
+			optionsBuilder.UseSqlite($"Data Source={this._config.DbFile}");
 		}
 	}
 }
