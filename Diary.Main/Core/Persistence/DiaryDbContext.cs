@@ -1,4 +1,6 @@
-﻿using Diary.Main.Core.Config;
+﻿using System;
+using System.IO;
+using Diary.Main.Core.Config;
 using Diary.Main.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,7 +18,9 @@ namespace Diary.Main.Core.Persistence {
 		{
 			base.OnConfiguring(optionsBuilder);
 
-			optionsBuilder.UseSqlite($"Data Source={this._config.DbFilePath}");
+			String path = Path.GetFullPath(this._config.DbFilePath);
+
+			optionsBuilder.UseSqlite($"Data Source={path}");
 		}
 	}
 }
