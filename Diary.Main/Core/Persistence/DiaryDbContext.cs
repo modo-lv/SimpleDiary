@@ -1,16 +1,14 @@
-﻿using System;
-using System.IO;
-using Diary.Main.Core.Config;
+﻿using Diary.Main.Core.Config;
 using Diary.Main.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Diary.Main.Core.Persistence {
 	public class DiaryDbContext : DbContext {
-		private readonly CoreConfig _config;
+		private readonly MainConfig _config;
 
 		public DbSet<Entry> Entries { get; set; }
 
-		public DiaryDbContext(CoreConfig config) {
+		public DiaryDbContext(MainConfig config) {
 			this._config = config;
 		}
 
@@ -18,9 +16,7 @@ namespace Diary.Main.Core.Persistence {
 		{
 			base.OnConfiguring(optionsBuilder);
 
-			String path = Path.GetFullPath(this._config.DbFilePath);
-
-			optionsBuilder.UseSqlite($"Data Source={path}");
+			optionsBuilder.UseSqlite($"Data Source={this._config.DbFilePath}");
 		}
 	}
 }

@@ -15,7 +15,6 @@ namespace Diary.Main
 
 			CoreDependencies.AddTo(services);
 			ServiceDependencies.AddTo(services);
-			ConfigDependencies.AddTo(services);
 		}
 
 		public static void Startup(IServiceProvider serviceProvider)

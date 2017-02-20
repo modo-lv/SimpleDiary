@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Diary.Main.Core.Config;
 using Diary.Main.Core.Persistence;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,7 +8,13 @@ namespace Diary.Main.Infrastructure.Dependencies
 	{
 		public static IServiceCollection AddTo(IServiceCollection services)
 		{
-			return services.AddTransient<DiaryDbContext>();
+			// Config
+			services.AddScoped(sp => DiaryConfig.ReadConfig<MainConfig>(saveDefaultConfig: true));
+
+			// DB
+			services.AddTransient<DiaryDbContext>();
+
+			return services;
 		}
 	}
 }
