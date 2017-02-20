@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Diary.Main;
 using Diary.Main.Infrastructure;
+using Diary.Main.Infrastructure.Dependencies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -18,7 +14,7 @@ namespace Diary.Api {
 		{
 			services.AddMvc();
 
-			DiaryDepdenencies.AddMainServicesTo(services);
+			DiaryCore.Init(services);
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -26,7 +22,7 @@ namespace Diary.Api {
 		{
 			loggerFactory.AddConsole();
 
-			MainStartup.Initialize();
+			DiaryCore.Startup(app.ApplicationServices);
 
 			if (env.IsDevelopment()) {
 				app.UseDeveloperExceptionPage();

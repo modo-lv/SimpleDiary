@@ -7,7 +7,7 @@ using Diary.Main.Core.Persistence;
 
 namespace Diary.Main.Migrations
 {
-    [DbContext(typeof(DiaryContext))]
+    [DbContext(typeof(DiaryDbContext))]
     partial class DiaryContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

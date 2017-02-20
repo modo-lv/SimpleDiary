@@ -6,21 +6,26 @@ using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace Diary.Api.Controllers {
+namespace Diary.Api.Controllers
+{
 	[Route("api/[controller]")]
-	public class TestController : Controller {
+	public class TestController : Controller
+	{
 		private readonly IHiService _hiService;
+		private readonly DiaryDbContext _dbContext;
 
-		public TestController(IHiService hiService) { this._hiService = hiService; }
+		public TestController(IHiService hiService, DiaryDbContext dbContext)
+		{
+			this._hiService = hiService;
+			this._dbContext = dbContext;
+		}
 
 		[HttpGet]
 		public String Get()
 		{
-			using (var db = new DiaryContext()) {
-				var blog = new Entry {Title = "Test entry"};
-				db.Entries.Add(blog);
-				db.SaveChanges();
-			}
+			var blog = new Entry {Title = "Test entry"};
+			this._dbContext.Entries.Add(blog);
+			this._dbContext.SaveChanges();
 
 			var text = this._hiService.SayHi();
 			return text;

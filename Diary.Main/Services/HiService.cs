@@ -1,9 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.IO;
 
-namespace Diary.Main.Services {
-	public class HiService : IHiService {
-		public String SayHi() { return "Hi universe"; }
+namespace Diary.Main.Services
+{
+	public class HiService : IHiService
+	{
+		public String SayHi()
+			=> Directory.GetCurrentDirectory();
 	}
 }

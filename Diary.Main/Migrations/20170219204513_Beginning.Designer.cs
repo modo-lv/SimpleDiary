@@ -7,7 +7,7 @@ using Diary.Main.Core.Persistence;
 
 namespace Diary.Main.Migrations
 {
-    [DbContext(typeof(DiaryContext))]
+    [DbContext(typeof(DiaryDbContext))]
     [Migration("20170219204513_Beginning")]
     partial class Beginning
     {
