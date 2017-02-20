@@ -18,7 +18,7 @@ namespace Diary.Api.Tests
 		}
 
 		[Fact]
-		public async Task ReturnHelloWorld() {
+		public async Task TestBasicRestCall() {
 			// Act
 			HttpResponseMessage response = await this._client.GetAsync("/api/test");
 			response.EnsureSuccessStatusCode();
