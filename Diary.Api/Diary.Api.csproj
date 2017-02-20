@@ -14,7 +14,6 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="1.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="1.1.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="1.1.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="1.1.0-msbuild3-final" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Diary.Main\Diary.Main.csproj" />

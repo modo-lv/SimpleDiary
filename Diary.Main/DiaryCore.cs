@@ -1,5 +1,4 @@
 ﻿using System;
-using Diary.Main.Core.Config;
 using Diary.Main.Core.Persistence;
 using Diary.Main.Infrastructure.Dependencies;
 using Microsoft.EntityFrameworkCore;

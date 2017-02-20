@@ -86,7 +86,7 @@ namespace Diary.Main.Core.Config
 		static DiaryConfig() {
 			BaseDir = Directory.GetCurrentDirectory();
 #if DEBUG
-			BaseDir = SimplerPath.Combine(Directory.GetParent(BaseDir).FullName, "Diary.Data");
+			BaseDir = @"c:\home\martin\dev\misc\SimpleDiary\Diary.Data";
 #endif
 		}
 	}
