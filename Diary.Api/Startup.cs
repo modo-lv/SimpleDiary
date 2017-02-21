@@ -1,4 +1,7 @@
-﻿using Diary.Main;
+﻿using System;
+using AutoMapper;
+using Diary.Api.Infrastructure;
+using Diary.Main;
 using Diary.Main.Infrastructure;
 using Diary.Main.Infrastructure.Dependencies;
 using Microsoft.AspNetCore.Builder;
@@ -12,7 +15,13 @@ namespace Diary.Api {
 		// For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddMvc();
+			var mapperConfig = new MapperConfiguration(cfg => {ApiObjectMapper.Configure(cfg);});
+			IMapper mapper = mapperConfig.CreateMapper();
+
+			services
+				.AddSingleton(mapper)
+
+				.AddMvc();
 
 			DiaryCore.Init(services);
 		}

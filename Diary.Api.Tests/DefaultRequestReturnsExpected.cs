@@ -1,8 +1,11 @@
 using System;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
+using Diary.Api.Dtos;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
+using Newtonsoft.Json;
 using Xunit;
 
 namespace Diary.Api.Tests
@@ -20,7 +23,15 @@ namespace Diary.Api.Tests
 		[Fact]
 		public async Task TestBasicRestCall() {
 			// Act
-			HttpResponseMessage response = await this._client.GetAsync("/api/test");
+			HttpResponseMessage response = await this._client.PostAsync(
+				"/api/entry",
+				new StringContent(
+					JsonConvert.SerializeObject(
+						new EntryInputDto
+						{
+							Title = "Test",
+							DateAndTime = DateTime.UtcNow
+						}), Encoding.UTF8, "application/json"));
 			response.EnsureSuccessStatusCode();
 
 			var responseString = await response.Content.ReadAsStringAsync();
