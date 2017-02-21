@@ -8,6 +8,17 @@ namespace Diary.Main.Core.Persistence {
 
 		public DbSet<Entry> Entries { get; set; }
 
+
+		#if DEBUG
+		/// <summary>
+		/// For use in DB migration generation
+		/// </summary>
+		public DiaryDbContext()
+		{
+			this._config = DiaryConfig.ReadConfig<MainConfig>();
+		}
+		#endif
+
 		public DiaryDbContext(MainConfig config) {
 			this._config = config;
 		}
@@ -16,7 +27,7 @@ namespace Diary.Main.Core.Persistence {
 		{
 			base.OnConfiguring(optionsBuilder);
 
-			optionsBuilder.UseSqlite($"Data Source={this._config.DbFile}");
+			optionsBuilder.UseSqlite($"Data Source={this._config.DbFilePath}");
 		}
 	}
 }
