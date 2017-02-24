@@ -2,7 +2,7 @@
 using Diary.Api.Dtos;
 using Diary.Main.Domain.Entities;
 
-namespace Diary.Api.Infrastructure.ObjectMapping
+namespace Diary.Api.Infrastructure.ObjectMapping.Profiles
 {
 	/// <summary>
 	/// AutoMapper profile for configuring mapping between <see cref="Entry"/>-related

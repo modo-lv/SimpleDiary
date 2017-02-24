@@ -1,31 +1,31 @@
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Diary.Api.Dtos;
 using FluentAssertions;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.TestHost;
 using Newtonsoft.Json;
 using Simpler.Net.Http;
+using Simpler.Net.Time;
 using Xunit;
 
 namespace Diary.Api.Tests.Integration
 {
-	public class BasicEntryTests : IntegrationTestBase {
+	[Trait("Category", "Integration")]
+	public class BasicEntryTests : IntegrationTestBase
+	{
+		public BasicEntryTests(TestFixture fixture) : base(fixture) { }
 
-		public BasicEntryTests(TestFixture fixture) : base(fixture) {}
-
-		[Fact]
-		public async Task CreateEntry() {
+		[Fact(DisplayName = nameof(BasicEntryTests) + TestCore.TestNameSeparator + nameof(CreateEntry))]
+		public async Task CreateEntry()
+		{
 			// ARRANGE
 			var input = new EntryInputDto
 			{
 				Title = "Test",
-				Timestamps = new []
+				Timestamps = new[]
 				{
-					DateTime.UtcNow
+					DateTime.UtcNow.DropMilliseconds()
 				}
 			};
 
@@ -45,7 +45,7 @@ namespace Diary.Api.Tests.Integration
 			// ASSERT
 			output.Id.Should().BeGreaterThan(0);
 			output.Title.ShouldBeEquivalentTo(input.Title);
-			output.ShouldBeEquivalentTo(input.Timestamps);
+			output.Timestamps.ShouldBeEquivalentTo(input.Timestamps);
 		}
 	}
 }

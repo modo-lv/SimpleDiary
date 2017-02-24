@@ -2,6 +2,7 @@
 using AutoMapper;
 using AutoMapper.Configuration;
 using Diary.Api.Infrastructure.ObjectMapping;
+using Diary.Api.Infrastructure.ObjectMapping.Profiles;
 
 namespace Diary.Api.Infrastructure
 {

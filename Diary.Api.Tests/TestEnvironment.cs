@@ -19,7 +19,7 @@ namespace Diary.Api.Tests
 
 		public override void ConfigureServices(IServiceCollection services) {
 			// Replace DB path
-			DiaryConfig.BaseDir = Directory.GetCurrentDirectory();
+			DiaryConfig.BaseDir = AppContext.BaseDirectory;
 
 			base.ConfigureServices(services);
 		}
