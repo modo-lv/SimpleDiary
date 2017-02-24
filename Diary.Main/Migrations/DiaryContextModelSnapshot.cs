@@ -46,7 +46,7 @@ namespace Diary.Main.Migrations
             modelBuilder.Entity("Diary.Main.Domain.Entities.EntryTimestamp", b =>
                 {
                     b.HasOne("Diary.Main.Domain.Entities.Entry", "Entry")
-                        .WithMany("EntryTimestamps")
+                        .WithMany("Timestamps")
                         .HasForeignKey("EntryId");
                 });
         }

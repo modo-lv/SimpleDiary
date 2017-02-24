@@ -14,7 +14,7 @@ namespace Diary.Main.Core.Config
 		/// <summary>
 		/// Base directory for all application data: DB, config, etc.
 		/// </summary>
-		public static readonly String BaseDir;
+		public static String BaseDir;
 
 		/// <summary>
 		/// Read configuration from file for a given config type.

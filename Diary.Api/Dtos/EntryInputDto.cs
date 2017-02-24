@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Diary.Api.Dtos
 {
@@ -6,6 +7,6 @@ namespace Diary.Api.Dtos
 	{
 		public String Title { get; set; }
 
-		public DateTime DateAndTime { get; set; }
+		public IList<DateTime> Timestamps { get; set; }
 	}
 }

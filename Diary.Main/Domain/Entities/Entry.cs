@@ -6,6 +6,6 @@ namespace Diary.Main.Domain.Entities {
 	public class Entry : EntityBase {
 		public virtual String Title { get; set; }
 
-		public virtual IList<EntryTimestamp> EntryTimestamps { get; set; }
+		public virtual IList<EntryTimestamp> Timestamps { get; set; }
 	}
 }

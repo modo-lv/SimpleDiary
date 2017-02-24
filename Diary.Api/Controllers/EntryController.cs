@@ -1,6 +1,8 @@
-﻿using AutoMapper;
+﻿using System.Threading.Tasks;
+using AutoMapper;
 using Diary.Api.Dtos;
 using Diary.Main.Core.Persistence;
+using Diary.Main.Domain.Entities;
 using Diary.Main.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,9 +23,14 @@ namespace Diary.Api.Controllers
 		}
 
 		[HttpPost]
-		public EntryOutputDto Post([FromBody] EntryInputDto input)
-		{
-			var output = this._mapper.Map<EntryOutputDto>(input);
+		public async Task<EntryOutputDto> PostAsync([FromBody] EntryInputDto input) {
+			var entry = this._mapper.Map<Entry>(input);
+
+			this._dbContext.Add(entry);
+
+			await this._dbContext.SaveChangesAsync();
+
+			var output = this._mapper.Map<EntryOutputDto>(entry);
 
 			return output;
 		}

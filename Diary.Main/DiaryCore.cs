@@ -21,6 +21,7 @@ namespace Diary.Main
 			var context = serviceProvider.GetService<DiaryDbContext>();
 			if (context == null)
 				throw new NullReferenceException($"Service provider returned a null {nameof(DiaryDbContext)}.");
+
 			context.Database.Migrate();
 		}
 	}

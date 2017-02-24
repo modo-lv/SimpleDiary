@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "Diary.Api.Tests": {
+      "commandName": "Project"
+    }
+  }
+}

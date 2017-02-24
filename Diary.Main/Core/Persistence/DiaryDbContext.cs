@@ -1,4 +1,5 @@
-﻿using Diary.Main.Core.Config;
+﻿using System.IO;
+using Diary.Main.Core.Config;
 using Diary.Main.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,10 +9,9 @@ namespace Diary.Main.Core.Persistence {
 
 		public DbSet<Entry> Entries { get; set; }
 
-
 		#if DEBUG
 		/// <summary>
-		/// For use in DB migration generation
+		/// Only used in generating and applying migrations.
 		/// </summary>
 		public DiaryDbContext()
 		{
