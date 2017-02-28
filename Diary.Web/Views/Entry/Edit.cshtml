@@ -1,0 +1,12 @@
+﻿@using Diary.Api.Dtos
+
+@model EntryDto
+
+@using (Html.BeginForm(FormMethod.Post))
+{
+	@Html.TextBoxFor(m => m.Id)
+	@Html.TextBoxFor(m => m.Title)
+	@Html.TextAreaFor(m => m.Content)
+
+	<input type="submit" value="Save"/>
+}

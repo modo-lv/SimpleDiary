@@ -20,7 +20,7 @@ namespace Diary.Api.Tests.Integration
 		public async Task CreateEntry()
 		{
 			// ARRANGE
-			var input = new EntryInputDto
+			var input = new EntryDto
 			{
 				Title = "Test",
 				Timestamps = new[]

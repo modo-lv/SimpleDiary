@@ -12,11 +12,9 @@ namespace Diary.Api.Infrastructure.ObjectMapping.Profiles
 	{
 		public EntryProfile()
 		{
-			this.CreateMap<EntryInputDto, EntryOutputDto>();
+			this.CreateMap<EntryDto, Entry>();
 
-			this.CreateMap<EntryInputDto, Entry>();
-
-			this.CreateMap<Entry, EntryOutputDto>();
+			this.CreateMap<Entry, EntryDto>();
 		}
 	}
 }

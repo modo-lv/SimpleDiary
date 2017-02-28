@@ -1,9 +1,9 @@
-﻿{
+{
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:59437/",
+      "applicationUrl": "http://localhost:16482/",
       "sslPort": 0
     }
   },
@@ -18,10 +18,11 @@
     "Diary.Web": {
       "commandName": "Project",
       "launchBrowser": true,
+      "launchUrl": "entry/new",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "http://localhost:59438"
+      "applicationUrl": "http://localhost:16483"
     }
   }
 }
