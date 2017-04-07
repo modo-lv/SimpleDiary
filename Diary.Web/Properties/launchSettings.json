@@ -18,7 +18,7 @@
     "Diary.Web": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "entry/new",
+      "launchUrl": "entries",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

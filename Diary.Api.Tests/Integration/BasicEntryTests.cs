@@ -40,7 +40,7 @@ namespace Diary.Api.Tests.Integration
 			response.EnsureSuccessStatusCode();
 
 			var responseString = await response.Content.ReadAsStringAsync();
-			var output = JsonConvert.DeserializeObject<EntryOutputDto>(responseString);
+			var output = JsonConvert.DeserializeObject<EntryDto>(responseString);
 
 			// ASSERT
 			output.Id.Should().BeGreaterThan(0);
