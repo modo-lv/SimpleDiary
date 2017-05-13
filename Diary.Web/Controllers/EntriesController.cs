@@ -26,6 +26,11 @@ namespace Diary.Web.Controllers
 			this._api = this._serviceProvider.GetService<EntryApiController>();
 		}
 
+
+		/// <summary>
+		/// Main entry list
+		/// </summary>
+		/// <returns></returns>
 		[HttpGet]
 		public async Task<IActionResult> Index()
 		{
@@ -37,6 +42,11 @@ namespace Diary.Web.Controllers
 			return this.View(model);
 		}
 
+		/// <summary>
+		/// Delete entry
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
 		[HttpGet]
 		public async Task<IActionResult> Delete(UInt32 id)
 		{
@@ -44,12 +54,21 @@ namespace Diary.Web.Controllers
 			return this.RedirectToAction(nameof(this.Index));
 		}
 
+		/// <summary>
+		/// Open entry creation page
+		/// </summary>
+		/// <returns></returns>
 		[HttpGet]
 		public IActionResult New() => this.View("Edit", new EntryDto());
 
+		/// <summary>
+		/// Entry creation page submit
+		/// </summary>
+		/// <param name="model"></param>
+		/// <returns></returns>
 		[HttpPost]
 		public async Task<IActionResult> New(EntryDto model)
-		{
+		{			
 			model = await this._api.PostAsync(this._mapper.Map<EntryDto>(model));
 
 			return this.View("Edit", model);

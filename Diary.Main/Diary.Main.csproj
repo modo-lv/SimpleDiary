@@ -6,13 +6,13 @@
 	</PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="5.2.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Design" Version="1.1.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="1.1.0-preview4-final" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="1.1.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+    <PackageReference Include="AutoMapper" Version="6.0.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Design" Version="1.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="1.1.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="1.1.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.2" />
     <PackageReference Include="Simpler.Net.FileSystem" Version="0.4.6" />
-    <PackageReference Include="Simpler.Net.Time" Version="0.1.0" />
+    <PackageReference Include="Simpler.Net.Time" Version="0.1.1" />
   </ItemGroup>
 
 </Project>

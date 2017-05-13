@@ -7,6 +7,8 @@ namespace Diary.Main.Infrastructure.ObjectMapping.Converters
 	public class TimeToStampConverter : ITypeConverter<DateTime, UInt64>
 	{
 		public UInt64 Convert(DateTime source, UInt64 destination, ResolutionContext context)
-			=> source.ToUniversalTime().ToUnixTimeStamp<UInt64>();
+		{
+			return source.ToUniversalTime().ToUnixTimeStamp<UInt64>();
+		}
 	}
 }

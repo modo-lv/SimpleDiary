@@ -23,10 +23,7 @@ namespace Diary.Api.Tests.Integration
 			var input = new EntryDto
 			{
 				Title = "Test",
-				Timestamps = new[]
-				{
-					DateTime.UtcNow.DropMilliseconds()
-				}
+				Timestamp = DateTime.UtcNow.DropMilliseconds()
 			};
 
 			// ACT
@@ -45,7 +42,7 @@ namespace Diary.Api.Tests.Integration
 			// ASSERT
 			output.Id.Should().BeGreaterThan(0);
 			output.Title.ShouldBeEquivalentTo(input.Title);
-			output.Timestamps.ShouldBeEquivalentTo(input.Timestamps);
+			output.Timestamp.ShouldBeEquivalentTo(input.Timestamp);
 		}
 	}
 }

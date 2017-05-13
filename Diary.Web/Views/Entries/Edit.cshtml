@@ -3,9 +3,13 @@
 
 @model EntryDto
 
-@using (Html.BeginForm(FormMethod.Post))
-{
+@{
+	this.Layout = "_Layout";
+}
+
+@using (Html.BeginForm(FormMethod.Post)) {
 	@Html.SimplerTextBoxFor(m => m.Id).SetAttributes("readonly", "disabled")
+	@Html.SimplerTextBoxFor(m => m.Timestamp).SetAttribute("data-provide", "datepicker")
 	@Html.SimplerTextBoxFor(m => m.Title)
 	@Html.TextAreaFor(m => m.Content)
 
