@@ -1,11 +1,12 @@
 ﻿@using Diary.Api.Dtos
+@using Simpler.Net.Mvc
 
 @model EntryDto
 
 @using (Html.BeginForm(FormMethod.Post))
 {
-	@Html.TextBoxFor(m => m.Id)
-	@Html.TextBoxFor(m => m.Title)
+	@Html.SimplerTextBoxFor(m => m.Id).SetAttributes("readonly", "disabled")
+	@Html.SimplerTextBoxFor(m => m.Title)
 	@Html.TextAreaFor(m => m.Content)
 
 	<input type="submit" value="Save"/>

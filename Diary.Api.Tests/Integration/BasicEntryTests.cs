@@ -31,7 +31,7 @@ namespace Diary.Api.Tests.Integration
 
 			// ACT
 			HttpResponseMessage response = await this._client.PostAsync(
-				"/api/entry",
+				"/api/entries",
 				new StringContent(
 					JsonConvert.SerializeObject(input),
 					Encoding.UTF8,

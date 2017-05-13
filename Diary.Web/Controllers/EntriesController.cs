@@ -45,17 +45,14 @@ namespace Diary.Web.Controllers
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> New()
-		{
-			return this.View(new EntryDto());
-		}
+		public IActionResult New() => this.View("Edit", new EntryDto());
 
 		[HttpPost]
 		public async Task<IActionResult> New(EntryDto model)
 		{
 			model = await this._api.PostAsync(this._mapper.Map<EntryDto>(model));
 
-			return this.View(model);
+			return this.View("Edit", model);
 		}
 	}
 }
