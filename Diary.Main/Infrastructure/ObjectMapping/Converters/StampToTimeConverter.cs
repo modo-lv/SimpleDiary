@@ -4,9 +4,9 @@ using Simpler.Net.Time;
 
 namespace Diary.Main.Infrastructure.ObjectMapping.Converters
 {
-	public class StampToTimeConverter : ITypeConverter<UInt64, DateTime>
+	public class StampToTimeConverter : ITypeConverter<Int64, DateTime>
 	{
-		public DateTime Convert(UInt64 source, DateTime destination, ResolutionContext context)
+		public DateTime Convert(Int64 source, DateTime destination, ResolutionContext context)
 			=> SimplerTime.UnixEpochStart.AddSeconds(source);
 	}
 }

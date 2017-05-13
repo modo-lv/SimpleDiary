@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ using Diary.Main.Infrastructure.ObjectMapping;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -42,6 +44,13 @@ namespace Diary.Web
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
 		{
 			app.UseStaticFiles();
+
+			app.UseRequestLocalization(
+				new RequestLocalizationOptions
+				{
+					DefaultRequestCulture = new RequestCulture("lv-LV"),
+					SupportedCultures = new[] {new CultureInfo("lv-LV")}
+				});
 
 			loggerFactory.AddConsole();
 

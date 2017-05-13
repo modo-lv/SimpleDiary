@@ -68,7 +68,7 @@ namespace Diary.Web.Controllers
 		/// <returns></returns>
 		[HttpPost]
 		public async Task<IActionResult> New(EntryDto model)
-		{			
+		{
 			model = await this._api.PostAsync(this._mapper.Map<EntryDto>(model));
 
 			return this.View("Edit", model);

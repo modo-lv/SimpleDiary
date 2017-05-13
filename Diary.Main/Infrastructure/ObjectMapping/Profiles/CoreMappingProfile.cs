@@ -9,8 +9,8 @@ namespace Diary.Main.Infrastructure.ObjectMapping.Profiles
 	{
 		public CoreMappingProfile()
 		{
-			this.CreateMap<UInt64, DateTime>().ConvertUsing<StampToTimeConverter>();
-			this.CreateMap<DateTime, UInt64>().ConvertUsing<TimeToStampConverter>();
+			this.CreateMap<Int64, DateTime>().ConvertUsing<StampToTimeConverter>();
+			this.CreateMap<DateTime, Int64>().ConvertUsing<TimeToStampConverter>();
 
 			this.CreateMap<DateTime, EntryTimestamp>()
 				.ForMember(d => d.Timestamp, mo => mo.MapFrom(s => s));

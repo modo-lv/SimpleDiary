@@ -6,6 +6,6 @@ namespace Diary.Main.Domain.Entities
 	{
 		public virtual Entry Entry { get; set; }
 
-		public virtual UInt64 Timestamp { get; set; }
+		public virtual Int64 Timestamp { get; set; }
 	}
 }

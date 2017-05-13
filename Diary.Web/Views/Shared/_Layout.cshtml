@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using System.Globalization
+@using Simpler.Net.Time
+<!DOCTYPE html>
 <html>
 <head>
 	<title>Diary</title>
@@ -23,8 +25,24 @@
 	<!-- Bootstrap DatePicker -->
 	<link rel="stylesheet" href="~/libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css"/>
 	<script src="~/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+	<script>
+		$(function() {
+			$.fn.datepicker.defaults.format = $("#CultureInfoDataBlock").data("bootstrap-datepicker-format");
+			$.fn.datepicker.defaults.weekStart = $("#CultureInfoDataBlock").data("week-start-day");
+			$.fn.datepicker.defaults.todayHighlight = true;
+			$.fn.datepicker.defaults.startDate = $("#CultureInfoDataBlock").data("unix-epoch");
+		})
+	</script>
+
 </head>
 <body>
 @RenderBody()
+
+<section id="DataBlocks">
+	<br id="CultureInfoDataBlock"
+	    data-bootstrap-datepicker-format="@CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.Replace("M", "m")"
+	    data-week-start-day="@((int)CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek)"
+			data-unix-epoch="@SimplerTime.UnixEpochStart.ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern)"/>
+</section>
 </body>
 </html>
