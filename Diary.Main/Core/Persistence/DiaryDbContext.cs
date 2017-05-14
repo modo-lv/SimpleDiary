@@ -9,6 +9,8 @@ namespace Diary.Main.Core.Persistence {
 
 		public DbSet<Entry> Entries { get; set; }
 
+		public DbSet<EntryTimestamp> EntryTimestamps { get; set; }
+
 		#if DEBUG
 		/// <summary>
 		/// Only used in generating and applying migrations.

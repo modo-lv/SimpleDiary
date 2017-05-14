@@ -13,6 +13,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="10.0.2" />
     <PackageReference Include="Simpler.Net.FileSystem" Version="0.4.6" />
     <PackageReference Include="Simpler.Net.Time" Version="0.1.1.1" />
+	  <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="1.0.1" />
   </ItemGroup>
 
 </Project>

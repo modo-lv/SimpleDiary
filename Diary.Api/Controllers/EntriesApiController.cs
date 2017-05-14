@@ -7,6 +7,7 @@ using AutoMapper;
 using Diary.Api.Dtos;
 using Diary.Main.Core.Persistence;
 using Diary.Main.Domain.Entities;
+using Diary.Main.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,11 +20,13 @@ namespace Diary.Api.Controllers
 	{
 		private readonly DiaryDbContext _dbContext;
 		private readonly IMapper _mapper;
+		private readonly IDiaryEntryService _diaryEntryService;
 
-		public EntriesApiController(DiaryDbContext dbContext, IMapper mapper)
+		public EntriesApiController(DiaryDbContext dbContext, IMapper mapper, IDiaryEntryService diaryEntryService)
 		{
 			this._dbContext = dbContext;
 			this._mapper = mapper;
+			this._diaryEntryService = diaryEntryService;
 		}
 
 		/// <summary>
@@ -33,7 +36,7 @@ namespace Diary.Api.Controllers
 		[HttpGet]
 		public async Task<IList<EntryDto>> GetAsync()
 		{
-			var entries = await this._dbContext.Entries.ToListAsync();
+			var entries = await this._diaryEntryService.GetEntriesAsync();
 
 			return this._mapper.Map<List<EntryDto>>(entries);
 		}
@@ -64,7 +67,7 @@ namespace Diary.Api.Controllers
 		[HttpGet("{id}")]
 		public async Task<EntryDto> GetAsync([FromRoute] UInt32 id)
 		{
-			Entry entry = await this._dbContext.Entries.SingleAsync(e => e.Id == id);
+			Entry entry = await this._diaryEntryService.GetEntryAsync(id);
 			var dto = this._mapper.Map<EntryDto>(entry);
 			return dto;
 		}

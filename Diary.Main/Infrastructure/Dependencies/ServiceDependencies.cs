@@ -5,7 +5,7 @@ namespace Diary.Main.Infrastructure.Dependencies {
 	public class ServiceDependencies {
 		public static IServiceCollection AddTo(IServiceCollection services)
 		{
-			services.AddScoped<IHiService, HiService>();
+			services.AddScoped<IDiaryEntryService, DiaryEntryService>();
 
 			return services;
 		}
