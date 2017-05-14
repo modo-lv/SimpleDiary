@@ -42,7 +42,7 @@
 	<br id="CultureInfoDataBlock"
 	    data-bootstrap-datepicker-format="@CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.Replace("M", "m")"
 	    data-week-start-day="@((int)CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek)"
-			data-unix-epoch="@SimplerTime.UnixEpochStart.ToString(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern)"/>
+			data-unix-epoch="@SimplerTime.UnixEpochStart.ToShortDateString()"/>
 </section>
 </body>
 </html>

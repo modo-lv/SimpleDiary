@@ -15,12 +15,12 @@ using Microsoft.EntityFrameworkCore;
 namespace Diary.Api.Controllers
 {
 	[Route("api/entries")]
-	public class EntryApiController : Controller
+	public class EntriesApiController : Controller
 	{
 		private readonly DiaryDbContext _dbContext;
 		private readonly IMapper _mapper;
 
-		public EntryApiController(DiaryDbContext dbContext, IMapper mapper)
+		public EntriesApiController(DiaryDbContext dbContext, IMapper mapper)
 		{
 			this._dbContext = dbContext;
 			this._mapper = mapper;
@@ -38,6 +38,11 @@ namespace Diary.Api.Controllers
 			return this._mapper.Map<List<EntryDto>>(entries);
 		}
 
+		/// <summary>
+		/// Create a new diary entry.
+		/// </summary>
+		/// <param name="input"></param>
+		/// <returns></returns>
 		[HttpPost]
 		public async Task<EntryDto> PostAsync([FromBody] EntryDto input) {
 			var entry = this._mapper.Map<Entry>(input);
@@ -51,7 +56,20 @@ namespace Diary.Api.Controllers
 			return output;
 		}
 
-		[HttpDelete("api/entries/{id}")]
+		/// <summary>
+		/// Retrieve a single diary entry.
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
+		[HttpGet("{id}")]
+		public async Task<EntryDto> GetAsync([FromRoute] UInt32 id)
+		{
+			Entry entry = await this._dbContext.Entries.SingleAsync(e => e.Id == id);
+			var dto = this._mapper.Map<EntryDto>(entry);
+			return dto;
+		}
+
+		[HttpDelete("{id}")]
 		public async Task DeleteAsync([FromRoute] UInt32 id)
 		{
 			Entry entry = await this._dbContext.Entries.SingleAsync(e => e.Id == id);

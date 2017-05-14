@@ -20,5 +20,10 @@ namespace Diary.Main.Domain.Entities {
 		/// Timestamps that this entity describes / relates to.
 		/// </summary>
 		public virtual IList<EntryTimestamp> Timestamps { get; set; }
+
+		public Entry()
+		{
+			this.Timestamps = new List<EntryTimestamp>();
+		}
 	}
 }

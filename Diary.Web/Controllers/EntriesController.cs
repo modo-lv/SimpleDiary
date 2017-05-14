@@ -16,14 +16,14 @@ namespace Diary.Web.Controllers
 		private readonly IServiceProvider _serviceProvider;
 		private readonly IMapper _mapper;
 
-		private readonly EntryApiController _api;
+		private readonly EntriesApiController _api;
 
 		public EntriesController(IServiceProvider serviceProvider, IMapper mapper)
 		{
 			this._serviceProvider = serviceProvider;
 			this._mapper = mapper;
 
-			this._api = this._serviceProvider.GetService<EntryApiController>();
+			this._api = this._serviceProvider.GetService<EntriesApiController>();
 		}
 
 

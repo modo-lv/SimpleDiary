@@ -11,6 +11,6 @@ namespace Diary.Api.Dtos
 
 		public String Content { get; set; }
 
-		public DateTime Timestamp { get; set; }
+		public DateTime? Timestamp { get; set; }
 	}
 }
