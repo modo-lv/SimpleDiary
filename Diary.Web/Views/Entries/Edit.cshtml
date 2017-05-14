@@ -21,8 +21,7 @@
 	</div>
 	<div>
 		<label for="@Html.IdFor(m => m.Timestamp)">@Localizer["Entry date"]:</label>
-		@(Html.SimplerTextBoxFor(m => m.Timestamp)
-				.SetAttribute("data-provide", "datepicker"))
+		@Html.EditorFor(m => m.Timestamp)
 	</div>
 	<div>
 		<a class="button" href="@Url.Action(nameof(EntriesController.Index))">@Localizer["Cancel"]</a>

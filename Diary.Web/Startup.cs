@@ -49,8 +49,13 @@ namespace Diary.Web
 			app.UseRequestLocalization(
 				new RequestLocalizationOptions
 				{
-					DefaultRequestCulture = new RequestCulture("lv-LV"),
-					SupportedCultures = new[] {new CultureInfo("lv-LV")}
+					DefaultRequestCulture = new RequestCulture("lv"),
+					SupportedCultures = new[]
+					{
+						new CultureInfo("lv"),
+						new CultureInfo("en-GB"), 
+						new CultureInfo("en-US"),
+					}
 				});
 
 			loggerFactory.AddConsole();

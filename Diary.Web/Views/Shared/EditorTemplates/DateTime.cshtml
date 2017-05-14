@@ -1,0 +1,8 @@
+﻿@using Simpler.Net.Mvc
+@using Simpler.Net.Time
+@model DateTime?
+
+@(Html.SimplerTextBoxFor(model => model)
+	.SetAttribute("data-provide", "datepicker")
+	.SetAttribute("value", Model.ToShortDateString())
+	)
