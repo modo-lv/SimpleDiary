@@ -1,17 +1,33 @@
 ﻿@using Diary.Api.Dtos
+@using Diary.Web.Controllers
 @using Simpler.Net.Mvc
+@using Microsoft.AspNetCore.Mvc.Rendering
+@using Microsoft.AspNetCore.Mvc.Localization
+
+@inject IViewLocalizer Localizer
 
 @model EntryDto
 
 @{
+	var isEdit = Model?.Id > 0;
 	this.Layout = "_Layout";
 }
+<h2>@Localizer[isEdit ? "Edit" : "Create"]</h2>
 
 @using (Html.BeginForm(FormMethod.Post)) {
-	@Html.SimplerTextBoxFor(m => m.Id).SetAttributes("readonly", "disabled")
-	@Html.SimplerTextBoxFor(m => m.Timestamp).SetAttribute("data-provide", "datepicker")
-	@Html.SimplerTextBoxFor(m => m.Title)
-	@Html.TextAreaFor(m => m.Content)
+<label for="@Html.IdFor(m => m.Content)">@Localizer["Entry content"]:</label>
+	<div>
+		@Html.TextAreaFor(m => m.Content)
+	</div>
+	<div>
+		<label for="@Html.IdFor(m => m.Timestamp)">@Localizer["Entry date"]:</label>
+		@(Html.SimplerTextBoxFor(m => m.Timestamp)
+				.SetAttribute("data-provide", "datepicker"))
+	</div>
+	<div>
+		<a class="button" href="@Url.Action(nameof(EntriesController.Index))">@Localizer["Cancel"]</a>
+		<input type="submit" value="Save" />
+	</div>
 
-	<input type="submit" value="Save"/>
+	<!---->
 }

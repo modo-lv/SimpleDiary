@@ -5,6 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot/themes\base\theme.css" />
+    <Content Remove="wwwroot/themes\base\theme.min.css" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="wwwroot\libs\bootstrap-datepicker\css\bootstrap-datepicker.css" />
     <Content Include="wwwroot\libs\bootstrap-datepicker\css\bootstrap-datepicker.css.map" />
     <Content Include="wwwroot\libs\bootstrap-datepicker\css\bootstrap-datepicker.min.css" />
@@ -89,17 +94,23 @@
     <Content Include="wwwroot\libs\bootstrap-datepicker\locales\bootstrap-datepicker.vi.min.js" />
     <Content Include="wwwroot\libs\bootstrap-datepicker\locales\bootstrap-datepicker.zh-CN.min.js" />
     <Content Include="wwwroot\libs\bootstrap-datepicker\locales\bootstrap-datepicker.zh-TW.min.js" />
+    <Content Include="wwwroot\themes\base\page.scss" />
+    <Content Include="wwwroot\themes\base\theme.scss" />
+    <Content Include="wwwroot\themes\base\views.scss" />
+    <Content Include="wwwroot\themes\base\views\entry-editor.scss" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="wwwroot\libs\" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="BuildWebCompiler" Version="1.11.339" />
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.0.0" />
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="1.1.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.ViewCompilation" Version="1.1.1" />
     <PackageReference Include="Simpler.Net.Html" Version="0.3.1.3" />
-    <PackageReference Include="Simpler.Net.Mvc" Version="0.0.1.1" />
+    <PackageReference Include="Simpler.Net.Mvc" Version="0.0.1.3" />
     <PackageReference Include="Simpler.Net.Time" Version="0.1.1.3" />
   </ItemGroup>
   <ItemGroup>

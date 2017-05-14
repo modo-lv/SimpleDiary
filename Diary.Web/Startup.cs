@@ -34,6 +34,7 @@ namespace Diary.Web
 			services
 				.AddSingleton(mapper)
 				.AddMvc()
+				.AddViewLocalization()
 				.AddApplicationPart(typeof(Api.Startup).GetTypeInfo().Assembly)
 				.AddControllersAsServices();
 

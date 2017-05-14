@@ -5,26 +5,15 @@
 <head>
 	<title>Diary</title>
 	
+	<link rel="stylesheet" href="~/themes/base/theme.min.css" />
+	
 	<!-- jQuery -->
-	<script
-		src="https://code.jquery.com/jquery-3.2.1.min.js"
-		integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-		crossorigin="anonymous"></script>
+	<script src="~/libs/jquery/jquery-3.2.1.min.js"></script>
 
-	<!-- Bootstrap -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" 
-	      integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" 
-	      crossorigin="anonymous">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" 
-	      integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" 
-	      crossorigin="anonymous">
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" 
-	        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" 
-	        crossorigin="anonymous"></script>
-					
 	<!-- Bootstrap DatePicker -->
-	<link rel="stylesheet" href="~/libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css"/>
+	<link rel="stylesheet" href="~/libs/bootstrap-datepicker/css/bootstrap-datepicker.standalone.min.css"/>
 	<script src="~/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+
 	<script>
 		$(function() {
 			$.fn.datepicker.defaults.format = $("#CultureInfoDataBlock").data("bootstrap-datepicker-format");
@@ -36,13 +25,24 @@
 
 </head>
 <body>
-@RenderBody()
 
-<section id="DataBlocks">
-	<br id="CultureInfoDataBlock"
-	    data-bootstrap-datepicker-format="@CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.Replace("M", "m")"
-	    data-week-start-day="@((int)CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek)"
-			data-unix-epoch="@SimplerTime.UnixEpochStart.ToShortDateString()"/>
-</section>
+<header>
+	
+</header>
+
+<main>
+	@RenderBody()
+</main>
+
+<footer>
+	
+	<section id="DataBlocks">
+		<input type="hidden" id="CultureInfoDataBlock"
+		       data-bootstrap-datepicker-format="@CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.Replace("M", "m")"
+		       data-week-start-day="@((int) CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek)"
+		       data-unix-epoch="@SimplerTime.UnixEpochStart.ToShortDateString()"/>
+	</section>
+</footer>
+
 </body>
 </html>
