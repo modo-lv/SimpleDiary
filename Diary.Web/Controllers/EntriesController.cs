@@ -61,7 +61,7 @@ namespace Diary.Web.Controllers
 		[HttpGet]
 		public IActionResult New()
 		{
-			var model = new EntryDto {Timestamp = DateTime.Today};
+			var model = new EntryDto {Timestamp = DateTime.Now};
 			return this.View("Edit", model);
 		}
 

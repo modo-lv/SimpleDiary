@@ -9,20 +9,13 @@
 	
 	<!-- jQuery -->
 	<script src="~/libs/jquery/jquery-3.2.1.min.js"></script>
-
-	<!-- Bootstrap DatePicker -->
-	<link rel="stylesheet" href="~/libs/tempusdominus-bootstrap/css/tempusdominus-bootstrap-3.min.css"/>
-	<script src="~/libs/tempusdominus-bootstrap/js/tempusdominus-bootstrap-3.min.js"></script>
-
-	<script>
-		$(function() {
-			$.fn.datepicker.defaults.format = $("#CultureInfoDataBlock").data("bootstrap-datepicker-format");
-			$.fn.datepicker.defaults.weekStart = $("#CultureInfoDataBlock").data("week-start-day");
-			$.fn.datepicker.defaults.todayHighlight = true;
-			$.fn.datepicker.defaults.startDate = $("#CultureInfoDataBlock").data("unix-epoch");
-		})
-	</script>
-
+	
+	<!-- jQuery UI -->
+	<link rel="stylesheet" href="~/libs/jquery-ui-1.12.1.custom/jquery-ui.min.css"/>
+	<script src="~/libs/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
+	
+	@Html.Partial("Head/TimePicker")
+	
 </head>
 <body>
 
@@ -38,9 +31,10 @@
 	
 	<section id="DataBlocks">
 		<input type="hidden" id="CultureInfoDataBlock"
-		       data-bootstrap-datepicker-format="@CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.Replace("M", "m")"
 		       data-week-start-day="@((int) CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek)"
-		       data-unix-epoch="@SimplerTime.UnixEpochStart.ToShortDateString()"/>
+		       data-unix-epoch="@SimplerTime.UnixEpochStart.ToShortDateString()"
+		       data-timepicker-format-date="@CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.Replace("M", "m")"
+					 data-timepicker-format-time="@CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern"/>
 	</section>
 </footer>
 

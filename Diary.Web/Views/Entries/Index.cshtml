@@ -12,14 +12,14 @@
 <table>
 	<tr>
 		<th>Date</th>
-		<th>Title</th>
+		<th>Content</th>
 		<th>Actions</th>
 	</tr>
 	@foreach (EntryDto entry in Model.Entries)
 	{
 		<tr>
 			<td>@entry.Timestamp.ToShortDateString()</td>
-			<td>@entry.Title</td>
+			<td>@entry.Content</td>
 			<td>
 				<a href="@this.Url.Action(nameof(EntriesController.Delete), new {entry.Id})">Delete</a>
 			</td>

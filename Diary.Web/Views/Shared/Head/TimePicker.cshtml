@@ -1,0 +1,25 @@
+﻿@using System.Globalization
+<!-- Timepicker -->
+<link rel="stylesheet" href="~/libs/jquery-ui-timepicker-addon/jquery-ui-timepicker-addon.min.css" />
+<script src="~/libs/jquery-ui-timepicker-addon/jquery-ui-timepicker-addon.min.js"></script>
+
+<!-- Timepicker defaults -->
+<script>
+	@{
+		var datePattern = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern
+			.Replace("yyyy", "yy")
+			.Replace("M", "m");
+		var timePattern = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern;
+	}
+
+	var defaultConfig = {
+		changeMonth: true,
+		changeYear: true,
+		dateFormat: "@datePattern",
+		timeFormat: "@timePattern"
+	};
+
+	$(() => {
+		$("input[data-type=datetime]").datetimepicker(defaultConfig);
+	});
+</script>
