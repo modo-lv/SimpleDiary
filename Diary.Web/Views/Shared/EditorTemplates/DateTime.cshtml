@@ -3,6 +3,6 @@
 @model DateTime?
 
 @(Html.SimplerTextBoxFor(model => model)
-	.SetAttribute("data-provide", "datepicker")
+	.SetAttribute("data-provide", "datetimepicker")
 	.SetAttribute("value", Model.ToShortDateString())
 	)

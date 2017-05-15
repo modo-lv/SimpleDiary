@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Diary.Main.Migrations
 {
-    public partial class Beginning : Migration
+    public partial class EntryBasics : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,7 +14,8 @@ namespace Diary.Main.Migrations
                 {
                     Id = table.Column<uint>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Title = table.Column<string>(nullable: true)
+                    Content = table.Column<string>(nullable: true),
+                    Timestamp = table.Column<long>(nullable: false)
                 },
                 constraints: table =>
                 {

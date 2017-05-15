@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,8 +23,8 @@ namespace Diary.Api.Tests.Integration
 			// ARRANGE
 			var input = new EntryDto
 			{
-				Title = "Test",
-				Timestamp = DateTime.UtcNow.DropMilliseconds()
+				Content = "Test",
+				Timestamp = DateTime.Now.DropMilliseconds()
 			};
 
 			// ACT
@@ -44,7 +42,6 @@ namespace Diary.Api.Tests.Integration
 
 			// ASSERT
 			output.Id.ShouldBeGreaterThan<UInt32>(0);
-			output.Title.ShouldBe(input.Title);
 			output.Timestamp.ShouldBe(input.Timestamp);
 		}
 
@@ -55,8 +52,8 @@ namespace Diary.Api.Tests.Integration
 			var input = this._fixture.Mapper.Map<Entry>(
 				new EntryDto
 				{
-					Title = "Test",
-					Timestamp = DateTime.UtcNow.DropMilliseconds()
+					Content = "Test",
+					Timestamp = DateTime.Now.DropMilliseconds()
 				});
 
 			this._fixture.DbContext.Entries.Add(input);
@@ -71,8 +68,7 @@ namespace Diary.Api.Tests.Integration
 
 			// ASSERT
 			output.Id.ShouldBe(input.Id);
-			output.Title.ShouldBe(input.Title);
-			output.Timestamp.ShouldBe(SimplerTime.UnixEpochStart.AddSeconds(input.Timestamp));
+			output.Timestamp.ShouldBe(SimplerTime.UnixEpochStart.AddSeconds(input.Timestamp).ToLocalTime());
 		}
 	}
 }

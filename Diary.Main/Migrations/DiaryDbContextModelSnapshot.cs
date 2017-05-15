@@ -8,7 +8,7 @@ using Diary.Main.Core.Persistence;
 namespace Diary.Main.Migrations
 {
     [DbContext(typeof(DiaryDbContext))]
-    partial class DiaryContextModelSnapshot : ModelSnapshot
+    partial class DiaryDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -23,8 +23,6 @@ namespace Diary.Main.Migrations
                     b.Property<string>("Content");
 
                     b.Property<long>("Timestamp");
-
-                    b.Property<string>("Title");
 
                     b.HasKey("Id");
 

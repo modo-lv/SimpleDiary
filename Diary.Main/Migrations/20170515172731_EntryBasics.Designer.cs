@@ -8,20 +8,22 @@ using Diary.Main.Core.Persistence;
 namespace Diary.Main.Migrations
 {
     [DbContext(typeof(DiaryDbContext))]
-    [Migration("20170219204513_Beginning")]
-    partial class Beginning
+    [Migration("20170515172731_EntryBasics")]
+    partial class EntryBasics
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
-                .HasAnnotation("ProductVersion", "1.1.0-rtm-22752");
+                .HasAnnotation("ProductVersion", "1.1.2");
 
             modelBuilder.Entity("Diary.Main.Domain.Entities.Entry", b =>
                 {
                     b.Property<uint>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Title");
+                    b.Property<string>("Content");
+
+                    b.Property<long>("Timestamp");
 
                     b.HasKey("Id");
 
