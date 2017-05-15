@@ -55,7 +55,7 @@ namespace Diary.Web.Controllers
 		}
 
 		/// <summary>
-		/// Open entry creation page
+		/// Open editor for a new entry.
 		/// </summary>
 		/// <returns></returns>
 		[HttpGet]
@@ -66,16 +66,49 @@ namespace Diary.Web.Controllers
 		}
 
 		/// <summary>
-		/// Entry creation page submit
+		/// Create a new entry.
 		/// </summary>
-		/// <param name="model"></param>
+		/// <param name="model">New entry data.</param>
+		/// <param name="saveAndClose">Non-<c>null</c> if user wants to close editor after saving.</param>
 		/// <returns></returns>
 		[HttpPost]
-		public async Task<IActionResult> New(EntryDto model)
+		public async Task<IActionResult> New(EntryDto model, String saveAndClose)
 		{
 			model = await this._api.PostAsync(this._mapper.Map<EntryDto>(model));
 
-			return this.View("Edit", model);
+			return saveAndClose == null
+				? (IActionResult) this.View("Edit", model)
+				: this.RedirectToAction(nameof(this.Index));
+		}
+
+		/// <summary>
+		/// Open existing entry for editing.
+		/// </summary>
+		/// <param name="id">Entry ID.</param>
+		/// <returns></returns>
+		[HttpGet]
+		public async Task<IActionResult> Edit(UInt32 id)
+		{
+			EntryDto entry = await this._api.GetAsync(id);
+
+			return this.View("Edit", entry);
+		}
+
+		/// <summary>
+		/// Update an existing entry.
+		/// </summary>
+		/// <param name="id">Entry ID.</param>
+		/// <param name="entry">New entry data.</param>
+		/// <param name="saveAndClose">Non-<c>null</c> if user wants to close editor.</param>
+		/// <returns></returns>
+		[HttpPost]
+		public async Task<IActionResult> Edit(UInt32 id, EntryDto entry, String saveAndClose)
+		{
+			var model = await this._api.PutAsync(id, this._mapper.Map<EntryDto>(entry));
+
+			return saveAndClose == null
+				? (IActionResult)this.View("Edit", model)
+				: this.RedirectToAction(nameof(this.Index));
 		}
 	}
 }

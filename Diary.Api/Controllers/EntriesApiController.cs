@@ -34,7 +34,7 @@ namespace Diary.Api.Controllers
 		/// </summary>
 		/// <returns></returns>
 		[HttpGet]
-		public async Task<IList<EntryDto>> GetAsync()
+		public async Task<IList<EntryDto>> GetAllAsync()
 		{
 			var entries = await this._diaryEntryService.GetEntriesAsync();
 
@@ -60,6 +60,23 @@ namespace Diary.Api.Controllers
 		}
 
 		/// <summary>
+		/// Update an existing entry.
+		/// </summary>
+		/// <param name="id">Entry ID.</param>
+		/// <param name="input">Updated entry data.</param>
+		/// <returns>Updated entry data after saving.</returns>
+		[HttpPut("{id}")]
+		public async Task<EntryDto> PutAsync([FromRoute] UInt32 id, [FromBody] EntryDto input)
+		{
+			Entry entry = await this._diaryEntryService.GetEntryAsync(id);
+			this._mapper.Map(input, entry);
+			this._dbContext.Update(entry);
+			await this._dbContext.SaveChangesAsync();
+			var output = this._mapper.Map<EntryDto>(entry);
+			return output;
+		}
+
+		/// <summary>
 		/// Retrieve a single diary entry.
 		/// </summary>
 		/// <param name="id"></param>
@@ -72,6 +89,10 @@ namespace Diary.Api.Controllers
 			return dto;
 		}
 
+		/// <summary>
+		/// Delete a given entry.
+		/// </summary>
+		/// <param name="id">Entry ID.</param>
 		[HttpDelete("{id}")]
 		public async Task DeleteAsync([FromRoute] UInt32 id)
 		{
