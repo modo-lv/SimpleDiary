@@ -36,7 +36,7 @@ namespace Diary.Web.Controllers
 		{
 			var model = new EntriesIndexViewModel
 			{
-				Entries = await this._api.GetAsync()
+				Entries = await this._api.GetAllAsync()
 			};
 
 			return this.View(model);
