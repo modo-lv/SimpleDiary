@@ -8,9 +8,10 @@ using Diary.Main.Core.Persistence;
 namespace Diary.Main.Migrations
 {
     [DbContext(typeof(DiaryDbContext))]
-    partial class DiaryContextModelSnapshot : ModelSnapshot
+    [Migration("20170515112228_SimplifiedTimestamp")]
+    partial class SimplifiedTimestamp
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2");

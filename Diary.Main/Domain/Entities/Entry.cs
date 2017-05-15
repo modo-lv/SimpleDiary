@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Diary.Main.Domain.Entities {
 	/// <summary>
@@ -17,13 +16,8 @@ namespace Diary.Main.Domain.Entities {
 		public virtual String Content { get; set; }
 
 		/// <summary>
-		/// Timestamps that this entity describes / relates to.
+		/// UNIX timestamp denoting when the entry was entered.
 		/// </summary>
-		public virtual IList<EntryTimestamp> Timestamps { get; set; }
-
-		public Entry()
-		{
-			this.Timestamps = new List<EntryTimestamp>();
-		}
+		public virtual Int64 Timestamp { get; set; }
 	}
 }

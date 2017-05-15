@@ -1,6 +1,7 @@
 ﻿[
 	{
 		"outputFile": "wwwroot/themes/base/theme.css",
-		"inputFile": "wwwroot/themes/base/theme.scss"
+		"inputFile": "wwwroot/themes/base/theme.scss",
+		"includeInProject": true
 	}
 ]

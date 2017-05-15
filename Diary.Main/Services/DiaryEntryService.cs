@@ -16,11 +16,10 @@ namespace Diary.Main.Services
 		public DiaryEntryService(DiaryDbContext dbContext) { this._dbContext = dbContext; }
 
 		public Task<Entry> GetEntryAsync(UInt32 id) =>
-			this._dbContext.Entries.Include(e => e.Timestamps).FirstOrDefaultAsync();
+			this._dbContext.Entries.FirstOrDefaultAsync();
 
 		public async Task<IList<Entry>> GetEntriesAsync() =>
 			await this._dbContext.Entries
-				.Include(e => e.Timestamps)
 				.ToListAsync();
 	}
 }

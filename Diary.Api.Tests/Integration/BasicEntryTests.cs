@@ -72,7 +72,7 @@ namespace Diary.Api.Tests.Integration
 			// ASSERT
 			output.Id.ShouldBe(input.Id);
 			output.Title.ShouldBe(input.Title);
-			output.Timestamp.ShouldBe(SimplerTime.UnixEpochStart.AddSeconds(input.Timestamps.First().Timestamp));
+			output.Timestamp.ShouldBe(SimplerTime.UnixEpochStart.AddSeconds(input.Timestamp));
 		}
 	}
 }

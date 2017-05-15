@@ -5,11 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot/themes\base\theme.css" />
-    <Content Remove="wwwroot/themes\base\theme.min.css" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="wwwroot\libs\bootstrap-datepicker\css\bootstrap-datepicker.css" />
     <Content Include="wwwroot\libs\bootstrap-datepicker\css\bootstrap-datepicker.css.map" />
     <Content Include="wwwroot\libs\bootstrap-datepicker\css\bootstrap-datepicker.min.css" />
@@ -95,6 +90,8 @@
     <Content Include="wwwroot\libs\bootstrap-datepicker\locales\bootstrap-datepicker.zh-CN.min.js" />
     <Content Include="wwwroot\libs\bootstrap-datepicker\locales\bootstrap-datepicker.zh-TW.min.js" />
     <Content Include="wwwroot\themes\base\page.scss" />
+    <Content Include="wwwroot\themes\base\theme.css" />
+    <Content Include="wwwroot\themes\base\theme.min.css" />
     <Content Include="wwwroot\themes\base\theme.scss" />
     <Content Include="wwwroot\themes\base\views.scss" />
     <Content Include="wwwroot\themes\base\views\entry-editor.scss" />
