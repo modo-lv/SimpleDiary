@@ -24,10 +24,8 @@
 		@Html.EditorFor(m => m.Timestamp)
 	</div>
 	<div>
-		<a class="button" href="@Url.Action(nameof(EntriesController.Index))">@Localizer["Cancel"]</a>
+		<a class="button" href="@Url.Action(nameof(EntriesController.Index))">@Localizer["Close"]</a>
 		<input type="submit" name="save" value="Save" />
 		<input type="submit" name="saveAndClose" value="Save &amp; close"/>
 	</div>
-
-	<!---->
 }

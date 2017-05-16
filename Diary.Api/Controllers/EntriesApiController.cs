@@ -97,7 +97,8 @@ namespace Diary.Api.Controllers
 		public async Task DeleteAsync([FromRoute] UInt32 id)
 		{
 			Entry entry = await this._dbContext.Entries.SingleAsync(e => e.Id == id);
-			this._dbContext.Entries.Remove(entry);
+			entry.IsDeleted = true;
+			this._dbContext.Update(entry);
 			await this._dbContext.SaveChangesAsync();
 		}
 	}

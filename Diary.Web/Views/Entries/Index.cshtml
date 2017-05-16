@@ -11,15 +11,20 @@
 <a href="@this.Url.Action(nameof(EntriesController.New))">New</a>
 <table>
 	<tr>
-		<th>Date</th>
+		<th>Date &amp; time</th>
 		<th>Content</th>
 		<th>Actions</th>
 	</tr>
 	@foreach (EntryDto entry in Model.Entries)
 	{
+		var content = entry.Content;
+		if (content.Length > 100)
+		{
+			content = content.Substring(0, 100) + " [..]";
+		}
 		<tr>
-			<td>@entry.Timestamp.ToShortDateString()</td>
-			<td>@entry.Content</td>
+			<td>@entry.Timestamp.ToShortDateTimeString()</td>
+			<td>@content</td>
 			<td>
 				<a href="@this.Url.Action(nameof(EntriesController.Edit), new {entry.Id})">Edit</a>
 				<a href="@this.Url.Action(nameof(EntriesController.Delete), new {entry.Id})">Delete</a>
