@@ -1,29 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Diary.Api.Controllers;
 using Diary.Api.Dtos;
 using Diary.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Diary.Web.Controllers
 {
 	public class EntriesController : Controller
 	{
-		private readonly IServiceProvider _serviceProvider;
 		private readonly IMapper _mapper;
 
 		private readonly EntriesApiController _api;
 
-		public EntriesController(IServiceProvider serviceProvider, IMapper mapper)
+		public EntriesController(IMapper mapper, EntriesApiController api)
 		{
-			this._serviceProvider = serviceProvider;
 			this._mapper = mapper;
-
-			this._api = this._serviceProvider.GetService<EntriesApiController>();
+			this._api = api;
 		}
 
 		public async Task<IActionResult> Index(UInt32? id)
@@ -92,7 +86,7 @@ namespace Diary.Web.Controllers
 		[HttpPost]
 		public async Task<IActionResult> New(EntryDto model, String saveAndClose)
 		{
-			model = await this._api.PostAsync(this._mapper.Map<EntryDto>(model));
+			model = await this._api.PostAsync(model);
 
 			return saveAndClose == null
 				? (IActionResult) this.View("Edit", model)
@@ -122,7 +116,7 @@ namespace Diary.Web.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Edit(UInt32 id, EntryDto entry, String saveAndClose)
 		{
-			var model = await this._api.PutAsync(id, this._mapper.Map<EntryDto>(entry));
+			var model = await this._api.PutAsync(id, entry);
 
 			return saveAndClose == null
 				? (IActionResult)this.View("Edit", model)

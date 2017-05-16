@@ -1,32 +1,44 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Diary.Api.Dtos;
+using Diary.Main.Core.Config;
 using Diary.Main.Core.Persistence;
 using Diary.Main.Domain.Entities;
 using Diary.Main.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Simpler.Net;
+using Simpler.Net.FileSystem;
+using Simpler.Net.FileSystem.Abstractions;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace Diary.Api.Controllers
-{
+namespace Diary.Api.Controllers {
 	[Route("api/entries")]
 	public class EntriesApiController : Controller
 	{
 		private readonly DiaryDbContext _dbContext;
 		private readonly IMapper _mapper;
 		private readonly IDiaryEntryService _diaryEntryService;
+		private readonly MainConfig _config;
+		private readonly IFileSystem _fileSystem;
 
-		public EntriesApiController(DiaryDbContext dbContext, IMapper mapper, IDiaryEntryService diaryEntryService)
+		public EntriesApiController(
+			DiaryDbContext dbContext,
+			IMapper mapper,
+			IDiaryEntryService diaryEntryService,
+			MainConfig config,
+			IFileSystem fileSystem)
 		{
 			this._dbContext = dbContext;
 			this._mapper = mapper;
 			this._diaryEntryService = diaryEntryService;
+			this._config = config;
+			this._fileSystem = fileSystem;
 		}
 
 		/// <summary>
@@ -41,22 +53,58 @@ namespace Diary.Api.Controllers
 			return this._mapper.Map<List<EntryDto>>(entries);
 		}
 
+
+		private async Task<EntryDto> SaveEntry(EntryDto input, UInt32 id = 0)
+		{
+			var fileName = input.FileData?.FileName;
+
+			if (fileName.IfNotNull(f => f.Intersect(Path.GetInvalidFileNameChars()).Any())) {
+				throw new Exception($"{fileName} contains invalid chars.");
+			}
+
+			Entry entry;
+
+			if (id > 0)
+			{
+				entry = await this._diaryEntryService.GetEntryAsync(id);
+			}
+			else
+			{
+				entry = this._mapper.Map<Entry>(input);
+				this._dbContext.Add(entry);
+				await this._dbContext.SaveChangesAsync();
+			}
+
+			if (input.FileData != null)
+			{
+				fileName = $"{entry.Id:D8}_{fileName}";
+				var filePath = SimplerPath.Combine(this._config.FileStorageDir, fileName);
+
+				this._fileSystem.Directory.CreateDirectory(Path.GetDirectoryName(filePath));
+
+				using (var stream = new FileStream(filePath, FileMode.Create))
+				{
+					await input.FileData.CopyToAsync(stream);
+				}
+
+				entry.FilePath = fileName;
+				this._dbContext.Update(entry);
+				await this._dbContext.SaveChangesAsync();
+			}
+
+			var output = this._mapper.Map<EntryDto>(entry);
+			return output;
+		}
+
 		/// <summary>
 		/// Create a new diary entry.
 		/// </summary>
 		/// <param name="input"></param>
 		/// <returns></returns>
 		[HttpPost]
-		public async Task<EntryDto> PostAsync([FromBody] EntryDto input) {
-			var entry = this._mapper.Map<Entry>(input);
-
-			this._dbContext.Add(entry);
-
-			await this._dbContext.SaveChangesAsync();
-
-			var output = this._mapper.Map<EntryDto>(entry);
-
-			return output;
+		public async Task<EntryDto> PostAsync([FromBody] EntryDto input)
+		{
+			return await this.SaveEntry(input);
 		}
 
 		/// <summary>
@@ -68,12 +116,7 @@ namespace Diary.Api.Controllers
 		[HttpPut("{id}")]
 		public async Task<EntryDto> PutAsync([FromRoute] UInt32 id, [FromBody] EntryDto input)
 		{
-			Entry entry = await this._diaryEntryService.GetEntryAsync(id);
-			this._mapper.Map(input, entry);
-			this._dbContext.Update(entry);
-			await this._dbContext.SaveChangesAsync();
-			var output = this._mapper.Map<EntryDto>(entry);
-			return output;
+			return await this.SaveEntry(input, id);
 		}
 
 		/// <summary>

@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using AutoMapper;
+﻿using AutoMapper;
 using Diary.Api.Dtos;
 using Diary.Main.Domain.Entities;
-using Simpler.Net;
-using Simpler.Net.Time;
 
 namespace Diary.Api.Infrastructure.ObjectMapping.Profiles
 {
@@ -17,7 +12,11 @@ namespace Diary.Api.Infrastructure.ObjectMapping.Profiles
 	{
 		public EntryProfile()
 		{
-			this.CreateMap<EntryDto, Entry>().ReverseMap();
+			this.CreateMap<EntryDto, Entry>()
+				.ForMember(d => d.FilePath, mo => mo.Ignore())
+
+				.ReverseMap()
+				.ForMember(d => d.FileData, mo => mo.Ignore());
 		}
 	}
 }

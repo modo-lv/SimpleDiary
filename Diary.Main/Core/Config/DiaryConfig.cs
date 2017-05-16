@@ -1,8 +1,9 @@
 ﻿using Newtonsoft.Json;
 using Simpler.Net.FileSystem;
 using System;
-using System.IO;
 using System.Text.RegularExpressions;
+using Simpler.Net.FileSystem.Abstractions;
+using Simpler.Net.FileSystem.Abstractions.Implementations;
 
 namespace Diary.Main.Core.Config
 {
@@ -15,6 +16,21 @@ namespace Diary.Main.Core.Config
 		/// Base directory for all application data: DB, config, etc.
 		/// </summary>
 		public static String BaseDir;
+
+		private static readonly IFileSystem Io;
+
+		/// <summary>
+		/// Static constructor.
+		/// </summary>
+		static DiaryConfig() {
+			Io = new DotNetFileSystem();
+
+			BaseDir = Io.Directory.GetCurrentDirectory();
+#if DEBUG
+			BaseDir = @"c:\home\martin\dev\misc\SimpleDiary\Diary.Data";
+#endif
+		}
+
 
 		/// <summary>
 		/// Read configuration from file for a given config type.
@@ -30,9 +46,9 @@ namespace Diary.Main.Core.Config
 
 			TConfig config;
 
-			if (File.Exists(filePath))
+			if (Io.File.Exists(filePath))
 			{
-				String json = File.ReadAllText(filePath);
+				String json = Io.File.ReadAllText(filePath);
 				config = JsonConvert.DeserializeObject<TConfig>(json);
 			}
 			else
@@ -40,7 +56,8 @@ namespace Diary.Main.Core.Config
 				config = Activator.CreateInstance<TConfig>();
 				if (saveDefaultConfig)
 				{
-					File.WriteAllText(filePath, JsonConvert.SerializeObject(config));
+					Io.CreateDirectoryForFile(filePath);
+					Io.File.WriteAllText(filePath, JsonConvert.SerializeObject(config));
 				}
 			}
 
@@ -58,7 +75,7 @@ namespace Diary.Main.Core.Config
 			String filePath = SimplerPath.Combine(BaseDir, fileName);
 			String json = JsonConvert.SerializeObject(config);
 
-			File.WriteAllText(filePath, json);
+			Io.File.WriteAllText(filePath, json);
 		}
 
 		/// <summary>
@@ -77,17 +94,8 @@ namespace Diary.Main.Core.Config
 					$"Configuration classes must be named .\"..Config\", but \"{className}\" is not.");
 			}
 
-			return $"{fileName}.json";
+			return $"diary.config/{fileName}.json";
 		}
 
-		/// <summary>
-		/// Static constructor.
-		/// </summary>
-		static DiaryConfig() {
-			BaseDir = Directory.GetCurrentDirectory();
-#if DEBUG
-			BaseDir = @"c:\home\martin\dev\misc\SimpleDiary\Diary.Data";
-#endif
-		}
 	}
 }

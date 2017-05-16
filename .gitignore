@@ -2,6 +2,7 @@
 obj/
 bin/
 *.user
-diary.db
 
+diary.db
+Diary.Data/
 Diary.Web/wwwroot/themes/**/*.css
