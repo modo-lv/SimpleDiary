@@ -19,6 +19,9 @@ namespace Diary.Main.Services
 			this._dbContext.Entries.FirstOrDefaultAsync(e => !e.IsDeleted);
 
 		public async Task<IList<Entry>> GetEntriesAsync() =>
-			await this._dbContext.Entries.Where(e => !e.IsDeleted).ToListAsync();
+			await this._dbContext.Entries
+				.Where(e => !e.IsDeleted)
+				.OrderByDescending(e => e.Timestamp)
+				.ToListAsync();
 	}
 }

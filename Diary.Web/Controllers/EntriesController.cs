@@ -26,21 +26,39 @@ namespace Diary.Web.Controllers
 			this._api = this._serviceProvider.GetService<EntriesApiController>();
 		}
 
+		public async Task<IActionResult> Index(UInt32? id)
+		{
+			return await (id.HasValue ? this.Display(id.Value) : this.List());
+		}
+
 
 		/// <summary>
-		/// Main entry list
+		/// List all entries.
 		/// </summary>
 		/// <returns></returns>
 		[HttpGet]
-		public async Task<IActionResult> Index()
+		public async Task<IActionResult> List()
 		{
 			var model = new EntriesIndexViewModel
 			{
 				Entries = await this._api.GetAllAsync()
 			};
 
-			return this.View(model);
+			return this.View("List", model);
 		}
+
+		/// <summary>
+		/// View a single entry.
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
+		[HttpGet]
+		public async Task<IActionResult> Display(UInt32 id)
+		{
+			EntryDto model = await this._api.GetAsync(id);
+			return this.View("Display", model);
+		}
+
 
 		/// <summary>
 		/// Delete entry
@@ -51,7 +69,7 @@ namespace Diary.Web.Controllers
 		public async Task<IActionResult> Delete(UInt32 id)
 		{
 			await this._api.DeleteAsync(id);
-			return this.RedirectToAction(nameof(this.Index));
+			return this.RedirectToAction(nameof(this.Display));
 		}
 
 		/// <summary>
@@ -78,7 +96,7 @@ namespace Diary.Web.Controllers
 
 			return saveAndClose == null
 				? (IActionResult) this.View("Edit", model)
-				: this.RedirectToAction(nameof(this.Index));
+				: this.RedirectToAction(nameof(this.Display));
 		}
 
 		/// <summary>
@@ -108,7 +126,7 @@ namespace Diary.Web.Controllers
 
 			return saveAndClose == null
 				? (IActionResult)this.View("Edit", model)
-				: this.RedirectToAction(nameof(this.Index));
+				: this.RedirectToAction(nameof(this.Display));
 		}
 	}
 }

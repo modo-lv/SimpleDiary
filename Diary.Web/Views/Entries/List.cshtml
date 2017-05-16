@@ -23,7 +23,11 @@
 			content = content.Substring(0, 100) + " [..]";
 		}
 		<tr>
-			<td>@entry.Timestamp.ToShortDateTimeString()</td>
+			<td>
+				<a href="@Url.Action(nameof(EntriesController.Display), new {entry.Id})">
+					@entry.Timestamp.ToShortDateTimeString()
+				</a>
+			</td>
 			<td>@content</td>
 			<td>
 				<a href="@this.Url.Action(nameof(EntriesController.Edit), new {entry.Id})">Edit</a>

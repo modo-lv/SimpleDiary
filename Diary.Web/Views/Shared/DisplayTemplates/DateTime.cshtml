@@ -1,0 +1,9 @@
+﻿@using Simpler.Net.Time
+@model DateTime?
+
+@if (Model.HasValue)
+{
+	<time datetime="@Model.Value.ToIso8601HtmlString()">
+		@Model?.ToShortDateTimeString()
+	</time>
+}

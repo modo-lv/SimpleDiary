@@ -1,0 +1,21 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using Simpler.Net.Time
+@model Diary.Api.Dtos.EntryDto
+
+@inject IViewLocalizer Localizer
+
+@{
+	this.Layout = "_Layout";
+}
+
+<h2>Entry</h2>
+
+<article>
+	<header>
+		@Html.DisplayFor(m => m.Timestamp)
+	</header>
+	@Model.Content
+	<footer>
+		<a class="button" href="@Url.Action()">@Localizer["Close"]</a>
+	</footer>
+</article>

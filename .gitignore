@@ -4,4 +4,4 @@ bin/
 *.user
 diary.db
 
-Diary.Web/themes/**/*.css
+Diary.Web/wwwroot/themes/**/*.css

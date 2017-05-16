@@ -14,8 +14,9 @@
 }
 <h2>@Localizer[isEdit ? "Edit" : "Create"]</h2>
 
-@using (Html.BeginForm(FormMethod.Post)) {
-<label for="@Html.IdFor(m => m.Content)">@Localizer["Entry content"]:</label>
+@using (Html.BeginForm(FormMethod.Post))
+{
+	<label for="@Html.IdFor(m => m.Content)">@Localizer["Entry content"]:</label>
 	<div>
 		@Html.TextAreaFor(m => m.Content)
 	</div>
@@ -24,8 +25,8 @@
 		@Html.EditorFor(m => m.Timestamp)
 	</div>
 	<div>
-		<a class="button" href="@Url.Action(nameof(EntriesController.Index))">@Localizer["Close"]</a>
-		<input type="submit" name="save" value="Save" />
+		<a class="button" href="@Url.Action(nameof(EntriesController.Display))">@Localizer["Close"]</a>
+		<input type="submit" name="save" value="Save"/>
 		<input type="submit" name="saveAndClose" value="Save &amp; close"/>
 	</div>
 }
