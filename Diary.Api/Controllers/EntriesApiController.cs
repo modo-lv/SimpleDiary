@@ -65,36 +65,11 @@ namespace Diary.Api.Controllers {
 				throw new Exception($"{fileName} contains invalid chars.");
 			}
 
-			Entry entry;
-
-			if (id > 0)
-			{
-				entry = await this._diaryEntryService.GetEntryAsync(id);
-				this._mapper.Map(input, entry);
-			}
-			else
-			{
-				entry = this._mapper.Map<Entry>(input);
-				this._dbContext.Add(entry);
-				await this._dbContext.SaveChangesAsync();
-			}
-
-			if (input.FileData != null)
-			{
-				fileName = $"{entry.Id:D8}_{fileName}";
-				var filePath = SimplerPath.Combine(this._config.FileStorageDir, fileName);
-
-				this._fileSystem.Directory.CreateDirectory(Path.GetDirectoryName(filePath));
-
-				using (var stream = new FileStream(filePath, FileMode.Create))
-				{
-					await input.FileData.CopyToAsync(stream);
-				}
-
-				entry.FilePath = fileName;
-			}
-
-			await this._dbContext.SaveChangesAsync();
+			Entry entry = await this._diaryEntryService.SaveEntryAsync(
+				this._mapper.Map<Entry>(input),
+				id,
+				fileName,
+				input.FileData?.OpenReadStream());
 
 			var output = this._mapper.Map<EntryDto>(entry);
 			return output;

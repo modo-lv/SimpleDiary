@@ -114,13 +114,13 @@ namespace Diary.Web.Controllers
 		/// <param name="saveAndClose">Non-<c>null</c> if user wants to close editor.</param>
 		/// <returns></returns>
 		[HttpPost]
-		public async Task<IActionResult> Edit(UInt32 id, EntryDto entry, String saveAndClose)
+		public async Task<IActionResult> Edit([FromRoute] UInt32 id, EntryDto entry, String saveAndClose)
 		{
 			var model = await this._api.SaveEntry(entry, id);
 
 			return saveAndClose == null
 				? (IActionResult)this.View("Edit", model)
-				: this.RedirectToAction(nameof(this.Display));
+				: this.RedirectToAction(nameof(this.Display), new {id});
 		}
 	}
 }

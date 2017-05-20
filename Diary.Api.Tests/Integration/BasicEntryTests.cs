@@ -85,7 +85,8 @@ namespace Diary.Api.Tests.Integration
 			var output = JsonConvert.DeserializeObject<EntryDto>(responseString);
 
 			// ASSERT
-			output.ShouldBeEquivalentTo(newData);
+			output.Timestamp.ShouldBeEquivalentTo(newData.Timestamp);
+			output.Content.ShouldBeEquivalentTo(newData.Content);
 		}
 
 

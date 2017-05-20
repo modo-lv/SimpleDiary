@@ -42,7 +42,7 @@ namespace Diary.Main.Services
 		}
 
 		public Task<Entry> GetEntryAsync(UInt32 id) =>
-			this._dbContext.Entries.FirstOrDefaultAsync(e => !e.IsDeleted);
+			this._dbContext.Entries.FirstOrDefaultAsync(e => e.Id == id && !e.IsDeleted);
 
 		public async Task<IList<Entry>> GetEntriesAsync() =>
 			await this._dbContext.Entries
@@ -59,21 +59,27 @@ namespace Diary.Main.Services
 		{
 			if (id > 0)
 			{
-				entry = await this.GetEntryAsync(id);
+				Entry existing = await this.GetEntryAsync(id);
+				existing.Timestamp = entry.Timestamp;
+				existing.Content = entry.Content;
+				this._dbContext.Update(existing);
+				entry = existing;
 			}
 			else
 			{
 				this._dbContext.Add(entry);
-				await this._dbContext.SaveChangesAsync();
 			}
+			await this._dbContext.SaveChangesAsync();
 
 			if (newFileContents == null)
 				return entry;
 
 			// Sort out all the names and paths
+			newFileName = $"{entry.Id:D8}_{newFileName}";
 			var oldFileName = entry.FilePath;
-			var newFileTempPath = this._fileSystem.Path.GetTempFileName();
-			var oldFileTempPath = this._fileSystem.Path.GetTempFileName();
+			var hasOldFile = !String.IsNullOrEmpty(entry.FilePath);
+			var newFileTempPath = this._fileSystem.Path.GetTempPath() + Guid.NewGuid() + Path.GetExtension(newFileName);
+			var oldFileTempPath = this._fileSystem.Path.GetTempPath() + Guid.NewGuid() + Path.GetExtension(oldFileName);
 			var newFilePath = SimplerPath.Combine(this._config.FileStorageDir, newFileName);
 			var oldFilePath = SimplerPath.Combine(this._config.FileStorageDir, oldFileName);
 
@@ -84,7 +90,9 @@ namespace Diary.Main.Services
 				{
 					await newFileContents.CopyToAsync(tempFile);
 				}
-				File.Copy(oldFilePath, oldFileTempPath);
+
+				if (hasOldFile)
+					File.Copy(oldFilePath, oldFileTempPath);
 
 				using (IDbContextTransaction trans = await this._dbContext.Database.BeginTransactionAsync())
 				{
@@ -97,14 +105,15 @@ namespace Diary.Main.Services
 						await this._dbContext.SaveChangesAsync();
 						trans.Commit();
 
-						if (newFileName != oldFileName)
+						if (hasOldFile && newFileName != oldFileName)
 							this._fileSystem.File.Delete(oldFilePath);
 					}
 					catch (Exception)
 					{
 						// If anything fails, move the old file back and cancel DB update
 						trans.Rollback();
-						File.Move(oldFileTempPath, oldFilePath);
+						if (hasOldFile)
+							File.Move(oldFileTempPath, oldFilePath);
 						throw;
 					}
 				}

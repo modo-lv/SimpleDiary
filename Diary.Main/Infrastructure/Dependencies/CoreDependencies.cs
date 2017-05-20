@@ -12,6 +12,7 @@ namespace Diary.Main.Infrastructure.Dependencies
 		{
 			// Filesystem
 			services.AddSingleton<IFileSystem, DotNetFileSystem>();
+			services.AddSingleton<IStreamFactory, DotNetStreamFactory>();
 
 			// Config
 			services.AddScoped(sp => DiaryConfig.ReadConfig<MainConfig>(saveDefaultConfig: true));
