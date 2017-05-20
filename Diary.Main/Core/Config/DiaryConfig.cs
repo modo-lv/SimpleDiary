@@ -1,9 +1,9 @@
 ﻿using Newtonsoft.Json;
-using Simpler.Net.FileSystem;
 using System;
 using System.Text.RegularExpressions;
-using Simpler.Net.FileSystem.Abstractions;
-using Simpler.Net.FileSystem.Abstractions.Implementations;
+using Simpler.Net.Io;
+using Simpler.Net.Io.Abstractions;
+using Simpler.Net.Io.Abstractions.Implementations;
 
 namespace Diary.Main.Core.Config
 {

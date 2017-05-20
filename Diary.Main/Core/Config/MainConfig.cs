@@ -1,6 +1,6 @@
 ﻿using System;
 using Newtonsoft.Json;
-using Simpler.Net.FileSystem;
+using Simpler.Net.Io;
 
 namespace Diary.Main.Core.Config
 {

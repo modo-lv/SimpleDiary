@@ -4,11 +4,13 @@ using System.Text;
 using System.Threading.Tasks;
 using Diary.Api.Dtos;
 using Diary.Main.Domain.Entities;
+using Diary.Main.Services;
+using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Simpler.Net.Http;
 using Simpler.Net.Time;
 using Xunit;
-using Shouldly;
 
 namespace Diary.Api.Tests.Integration
 {
@@ -17,6 +19,10 @@ namespace Diary.Api.Tests.Integration
 	{
 		public BasicEntryTests(TestFixture fixture) : base(fixture) { }
 
+		/// <summary>
+		/// Test creating an entry.
+		/// </summary>
+		/// <returns></returns>
 		[Fact(DisplayName = nameof(BasicEntryTests) + TestCore.TestNameSeparator + nameof(CreateEntry))]
 		public async Task CreateEntry()
 		{
@@ -41,11 +47,52 @@ namespace Diary.Api.Tests.Integration
 			var output = JsonConvert.DeserializeObject<EntryDto>(responseString);
 
 			// ASSERT
-			output.Id.ShouldBeGreaterThan<UInt32>(0);
-			output.Timestamp.ShouldBe(input.Timestamp);
+			output.Id.Should().BeGreaterThan(0);
+			output.Timestamp.ShouldBeEquivalentTo(input.Timestamp);
+		}
+
+		/// <summary>
+		/// Test updating an entry.
+		/// </summary>
+		/// <returns></returns>
+		[Fact(DisplayName = nameof(BasicEntryTests) + TestCore.TestNameSeparator + nameof(UpdateEntry))]
+		public async Task UpdateEntry()
+		{
+			// ARRANGE
+			var service = this._fixture.Services.GetRequiredService<IDiaryEntryService>();
+			Entry entry = await service.SaveEntryAsync(new Entry
+			{
+				Content = "Old value",
+				Timestamp = 0
+			});
+
+			var newData = new EntryDto {
+				Content = "New value",
+				Timestamp = DateTime.Now.DropMilliseconds()
+			};
+
+			// ACT
+			HttpResponseMessage response = await this._fixture.Client.PutAsync(
+				$"/api/entries/{entry.Id}",
+				new StringContent(
+					JsonConvert.SerializeObject(newData),
+					Encoding.UTF8,
+					CommonMimeTypes.Json)
+			);
+			response.EnsureSuccessStatusCode();
+
+			var responseString = await response.Content.ReadAsStringAsync();
+			var output = JsonConvert.DeserializeObject<EntryDto>(responseString);
+
+			// ASSERT
+			output.ShouldBeEquivalentTo(newData);
 		}
 
 
+		/// <summary>
+		/// Test retrieving a single entry.
+		/// </summary>
+		/// <returns></returns>
 		[Fact(DisplayName = nameof(BasicEntryTests) + TestCore.TestNameSeparator + nameof(GetEntry))]
 		public async Task GetEntry() {
 			// ARRANGE
@@ -67,8 +114,8 @@ namespace Diary.Api.Tests.Integration
 			var output = JsonConvert.DeserializeObject<EntryDto>(responseString);
 
 			// ASSERT
-			output.Id.ShouldBe(input.Id);
-			output.Timestamp.ShouldBe(SimplerTime.UnixEpochStart.AddSeconds(input.Timestamp).ToLocalTime());
+			output.Id.ShouldBeEquivalentTo(input.Id);
+			output.Timestamp.ShouldBeEquivalentTo(SimplerTime.UnixEpochStart.AddSeconds(input.Timestamp).ToLocalTime());
 		}
 	}
 }

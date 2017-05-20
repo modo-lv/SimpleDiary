@@ -86,7 +86,7 @@ namespace Diary.Web.Controllers
 		[HttpPost]
 		public async Task<IActionResult> New(EntryDto model, String saveAndClose)
 		{
-			model = await this._api.PostAsync(model);
+			model = await this._api.SaveEntry(model);
 
 			return saveAndClose == null
 				? (IActionResult) this.View("Edit", model)
@@ -116,7 +116,7 @@ namespace Diary.Web.Controllers
 		[HttpPost]
 		public async Task<IActionResult> Edit(UInt32 id, EntryDto entry, String saveAndClose)
 		{
-			var model = await this._api.PutAsync(id, entry);
+			var model = await this._api.SaveEntry(entry, id);
 
 			return saveAndClose == null
 				? (IActionResult)this.View("Edit", model)

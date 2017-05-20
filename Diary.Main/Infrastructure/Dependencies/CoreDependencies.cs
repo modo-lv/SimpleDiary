@@ -1,8 +1,8 @@
 ﻿using Diary.Main.Core.Config;
 using Diary.Main.Core.Persistence;
 using Microsoft.Extensions.DependencyInjection;
-using Simpler.Net.FileSystem.Abstractions;
-using Simpler.Net.FileSystem.Abstractions.Implementations;
+using Simpler.Net.Io.Abstractions;
+using Simpler.Net.Io.Abstractions.Implementations;
 
 namespace Diary.Main.Infrastructure.Dependencies
 {
