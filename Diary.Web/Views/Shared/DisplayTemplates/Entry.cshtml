@@ -11,6 +11,10 @@
 		</div>
 	</header>
 	<div class="content">
+		@if (!String.IsNullOrEmpty(Model.FileUrl))
+		{
+			<img src="@Url.Content(Model.FileUrl)" alt="@Model.FileName"/>
+		}
 		@Html.DisplayFor(m => m.Content)
 	</div>
 </article>

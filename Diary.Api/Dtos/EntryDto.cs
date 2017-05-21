@@ -20,5 +20,8 @@ namespace Diary.Api.Dtos
 		/// <inheritdoc cref="Entry.FileName"/>
 		public String FileName { get; set; }
 
+
+		public String FileUrl { get; set; }
+
 	}
 }

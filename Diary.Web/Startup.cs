@@ -1,19 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using AutoMapper;
 using Diary.Api.Infrastructure;
 using Diary.Main;
+using Diary.Main.Core.Config;
 using Diary.Main.Infrastructure.ObjectMapping;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
+using Simpler.Net.Io;
 
 namespace Diary.Web
 {
@@ -44,7 +48,15 @@ namespace Diary.Web
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
 		{
-			app.UseStaticFiles();
+			var config = app.ApplicationServices.GetRequiredService<MainConfig>();
+
+			app.UseStaticFiles()
+				.UseStaticFiles(
+					new StaticFileOptions
+					{
+						FileProvider = new PhysicalFileProvider(config.FileStorageDir),
+						RequestPath = new PathString($"/{config.FileStorageFolder}")
+					});
 
 			app.UseRequestLocalization(
 				new RequestLocalizationOptions
