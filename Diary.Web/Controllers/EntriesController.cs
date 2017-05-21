@@ -49,7 +49,7 @@ namespace Diary.Web.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Display(UInt32 id)
 		{
-			EntryOutputDto model = await this._api.GetAsync(id);
+			EntryDto model = await this._api.GetAsync(id);
 			return this.View("Display", model);
 		}
 
@@ -73,7 +73,7 @@ namespace Diary.Web.Controllers
 		[HttpGet]
 		public IActionResult New()
 		{
-			var model = new EntryInputDto {Timestamp = DateTime.Now};
+			var model = new EntryDto {Timestamp = DateTime.Now};
 			return this.View("Edit", model);
 		}
 
@@ -84,7 +84,7 @@ namespace Diary.Web.Controllers
 		/// <param name="saveAndClose">Non-<c>null</c> if user wants to close editor after saving.</param>
 		/// <returns></returns>
 		[HttpPost]
-		public async Task<IActionResult> New(EntryInputDto model, String saveAndClose)
+		public async Task<IActionResult> New(EntryDto model, String saveAndClose)
 		{
 			var result = await this._api.SaveEntry(model);
 
@@ -101,7 +101,9 @@ namespace Diary.Web.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Edit(UInt32 id)
 		{
-			EntryOutputDto entry = await this._api.GetAsync(id);
+			EntryDto entry = await this._api.GetAsync(id);
+
+			this.ViewBag.Id = id;
 
 			return this.View("Edit", entry);
 		}
@@ -114,13 +116,13 @@ namespace Diary.Web.Controllers
 		/// <param name="saveAndClose">Non-<c>null</c> if user wants to close editor.</param>
 		/// <returns></returns>
 		[HttpPost]
-		public async Task<IActionResult> Edit([FromRoute] UInt32 id, EntryInputDto entry, String saveAndClose)
+		public async Task<IActionResult> Edit([FromRoute] UInt32 id, EntryDto entry, String saveAndClose)
 		{
-			EntryOutputDto model = await this._api.SaveEntry(entry, id);
+			EntryDto model = await this._api.SaveEntry(entry, id);
 
 			return saveAndClose == null
 				? (IActionResult)this.View("Edit", model)
-				: this.RedirectToAction(nameof(this.Display), new {id});
+				: this.RedirectToAction(nameof(this.Display), new {model.Id});
 		}
 	}
 }

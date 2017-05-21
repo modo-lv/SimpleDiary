@@ -6,6 +6,6 @@ namespace Diary.Main.Domain.Entities
 {
     public abstract class EntityBase
     {
-			public virtual Int32 Id { get; set; }
+			public virtual UInt32 Id { get; set; }
     }
 }

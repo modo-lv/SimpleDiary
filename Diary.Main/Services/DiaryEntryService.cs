@@ -67,8 +67,8 @@ namespace Diary.Main.Services
 
 			// Sort out all the names and paths
 			newFileName = $"{entry.Id:D8}_{newFileName}";
-			var oldFileName = entry.FilePath;
-			var hasOldFile = !String.IsNullOrEmpty(entry.FilePath);
+			var oldFileName = entry.FileName;
+			var hasOldFile = !String.IsNullOrEmpty(entry.FileName);
 			var newFileTempPath = this._fileSystem.Path.GetTempPath() + Guid.NewGuid() + Path.GetExtension(newFileName);
 			var oldFileTempPath = this._fileSystem.Path.GetTempPath() + Guid.NewGuid() + Path.GetExtension(oldFileName);
 			var newFilePath = SimplerPath.Combine(this._config.FileStorageDir, newFileName);
@@ -92,7 +92,7 @@ namespace Diary.Main.Services
 						// Move new file over the old and update DB
 						this._fileSystem.CreateDirectoryForFile(newFilePath);
 						this._fileSystem.File.Move(newFileTempPath, newFilePath);
-						entry.FilePath = newFileName;
+						entry.FileName = newFileName;
 						this._dbContext.Entries.Update(entry);
 						await this._dbContext.SaveChangesAsync();
 						trans.Commit();

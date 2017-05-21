@@ -2,12 +2,11 @@
 @using Diary.Web.Controllers
 @using Microsoft.AspNetCore.Mvc.Rendering
 @using Microsoft.AspNetCore.Mvc.Localization
-@using Simpler.Net.Html
 @using Simpler.Net.Mvc
 
 @inject IViewLocalizer Localizer
 
-@model EntryInputDto
+@model EntryDto
 
 @{
 	var isEdit = Model?.Id > 0;

@@ -23,6 +23,6 @@ namespace Diary.Main.Domain.Entities {
 		/// <summary>
 		/// Path to this entry's file.
 		/// </summary>
-		public virtual String FilePath { get; set; }
+		public virtual String FileName { get; set; }
 	}
 }
