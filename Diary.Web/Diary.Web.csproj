@@ -94,9 +94,11 @@
     <Content Include="wwwroot\themes\base\theme.css" />
     <Content Include="wwwroot\themes\base\theme.min.css" />
     <Content Include="wwwroot\themes\base\theme.scss" />
+    <Content Include="wwwroot\themes\base\variables.scss" />
     <Content Include="wwwroot\themes\base\views.scss" />
+    <Content Include="wwwroot\themes\base\views\display-templates\entry.scss" />
+    <Content Include="wwwroot\themes\base\views\entries\list.scss" />
     <Content Include="wwwroot\themes\base\views\entry-editor.scss" />
-    <Content Include="wwwroot\themes\base\views\globals.scss" />
   </ItemGroup>
 
   <ItemGroup>

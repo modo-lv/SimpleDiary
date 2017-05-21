@@ -1,0 +1,17 @@
+﻿@using Diary.Web.Controllers
+@using Diary.Api.Dtos
+
+@model EntryDto
+
+<article class="entry">
+	<header>
+		@Html.DisplayFor(m => m.Timestamp)
+		<div class="action buttons">
+			<a href="@this.Url.Action(nameof(EntriesController.Edit), new {Model.Id})">Edit</a>
+			<a href="@this.Url.Action(nameof(EntriesController.Delete), new {Model.Id})">Delete</a>
+		</div>
+	</header>
+	<div class="content">
+		@Html.DisplayFor(m => m.Content)
+	</div>
+</article>

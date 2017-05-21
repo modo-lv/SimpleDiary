@@ -9,30 +9,11 @@
 
 <h1>Entries</h1>
 <a href="@this.Url.Action(nameof(EntriesController.New))">New</a>
-<table>
-	<tr>
-		<th>Date &amp; time</th>
-		<th>Content</th>
-		<th>Actions</th>
-	</tr>
-	@foreach (EntryDto entry in Model.Entries)
-	{
-		var content = entry.Content;
-		if (content.Length > 100)
-		{
-			content = content.Substring(0, 100) + " [..]";
-		}
-		<tr>
-			<td>
-				<a href="@Url.Action(nameof(EntriesController.Display), new {entry.Id})">
-					@entry.Timestamp.ToShortDateTimeString()
-				</a>
-			</td>
-			<td>@content</td>
-			<td>
-				<a href="@this.Url.Action(nameof(EntriesController.Edit), new {entry.Id})">Edit</a>
-				<a href="@this.Url.Action(nameof(EntriesController.Delete), new {entry.Id})">Delete</a>
-			</td>
-		</tr>
+
+<ol class="entry-list">
+	@foreach (EntryDto entry in Model.Entries) {
+		<li>
+			@Html.Partial("DisplayTemplates/Entry", entry)
+		</li>
 	}
-</table>
+</ol>

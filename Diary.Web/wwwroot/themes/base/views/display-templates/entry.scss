@@ -1,0 +1,17 @@
+﻿.entry {
+	display: flex;
+	flex-direction: row;
+	padding: $spacing;
+
+	header {
+		flex-shrink: 0;
+		padding: $spacing;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.content {
+		padding: $spacing;
+		text-align: justify;
+	}
+}

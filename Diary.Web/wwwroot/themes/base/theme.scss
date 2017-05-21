@@ -1,5 +1,10 @@
-﻿@import "./page.scss";
+﻿@import "./variables.scss";
+
+@import "./page.scss";
+@import "./globals.scss";
 
 @import "./views.scss";
 
-@import "./globals.scss";
+@import "./views/display-templates/entry.scss";
+
+@import "./views/entries/list.scss";
