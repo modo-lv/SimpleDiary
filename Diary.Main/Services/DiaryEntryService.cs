@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using Diary.Main.Core.Config;
 using Diary.Main.Core.Persistence;
 using Diary.Main.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.Extensions.DependencyInjection;
 using Simpler.Net.Io;
 using Simpler.Net.Io.Abstractions;
 
@@ -19,25 +16,19 @@ namespace Diary.Main.Services
 	public class DiaryEntryService : IDiaryEntryService
 	{
 		private readonly DiaryDbContext _dbContext;
-		private IMapper _mapper;
 		private readonly IFileSystem _fileSystem;
 		private readonly MainConfig _config;
-		private IServiceProvider _services;
 		private readonly IStreamFactory _streams;
 
 		public DiaryEntryService(
 			DiaryDbContext dbContext,
-			IMapper mapper,
 			IFileSystem fileSystem,
 			MainConfig config,
-			IServiceProvider services,
 			IStreamFactory streams)
 		{
 			this._dbContext = dbContext;
-			this._mapper = mapper;
 			this._fileSystem = fileSystem;
 			this._config = config;
-			this._services = services;
 			this._streams = streams;
 		}
 
@@ -99,6 +90,7 @@ namespace Diary.Main.Services
 					try
 					{
 						// Move new file over the old and update DB
+						this._fileSystem.CreateDirectoryForFile(newFilePath);
 						this._fileSystem.File.Move(newFileTempPath, newFilePath);
 						entry.FilePath = newFileName;
 						this._dbContext.Entries.Update(entry);

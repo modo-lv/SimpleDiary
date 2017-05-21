@@ -2,6 +2,8 @@
 @using Diary.Web.Controllers
 @using Microsoft.AspNetCore.Mvc.Rendering
 @using Microsoft.AspNetCore.Mvc.Localization
+@using Simpler.Net.Html
+@using Simpler.Net.Mvc
 
 @inject IViewLocalizer Localizer
 
@@ -17,7 +19,7 @@
 {
 	<label for="@Html.IdFor(m => m.Content)">@Localizer["Entry content"]:</label>
 	<div>
-		@Html.TextAreaFor(m => m.Content)
+		@Html.SimplerTextAreaFor(m => m.Content).AddClass("typed")
 	</div>
 	<div>
 		<label for="@Html.IdFor(m => m.Timestamp)">@Localizer["Entry date"]:</label>
@@ -28,7 +30,7 @@
 		<input type="file" name="@Html.NameFor(m => m.FileData)" id="@Html.IdFor(m => m.FileData)" />
 	</div>
 	<div>
-		<a class="button" href="@Url.Action(nameof(EntriesController.Display))">@Localizer["Close"]</a>
+		<a class="button" href="@Url.Action(nameof(EntriesController.List))">@Localizer["Close"]</a>
 		<input type="submit" name="save" value="Save"/>
 		<input type="submit" name="saveAndClose" value="Save &amp; close"/>
 	</div>
