@@ -46,17 +46,17 @@ namespace Diary.Api.Controllers {
 		/// </summary>
 		/// <returns></returns>
 		[HttpGet]
-		public async Task<IList<EntryDto>> GetAllAsync()
+		public async Task<IList<EntryOutputDto>> GetAllAsync()
 		{
 			var entries = await this._diaryEntryService.GetEntriesAsync();
 
-			return this._mapper.Map<List<EntryDto>>(entries);
+			return this._mapper.Map<List<EntryOutputDto>>(entries);
 		}
 
 
 		[HttpPost]
 		[HttpPut("{id}")]
-		public async Task<EntryDto> SaveEntry([FromBody] EntryDto input, [FromRoute] UInt32 id = 0)
+		public async Task<EntryOutputDto> SaveEntry([FromBody] EntryInputDto input, [FromRoute] UInt32 id = 0)
 		{
 			var fileName = input.FileData?.FileName;
 
@@ -71,7 +71,7 @@ namespace Diary.Api.Controllers {
 				fileName,
 				input.FileData?.OpenReadStream());
 
-			var output = this._mapper.Map<EntryDto>(entry);
+			var output = this._mapper.Map<EntryOutputDto>(entry);
 			return output;
 		}
 
@@ -81,10 +81,10 @@ namespace Diary.Api.Controllers {
 		/// <param name="id"></param>
 		/// <returns></returns>
 		[HttpGet("{id}")]
-		public async Task<EntryDto> GetAsync([FromRoute] UInt32 id)
+		public async Task<EntryOutputDto> GetAsync([FromRoute] UInt32 id)
 		{
 			Entry entry = await this._diaryEntryService.GetEntryAsync(id);
-			var dto = this._mapper.Map<EntryDto>(entry);
+			var dto = this._mapper.Map<EntryOutputDto>(entry);
 			return dto;
 		}
 

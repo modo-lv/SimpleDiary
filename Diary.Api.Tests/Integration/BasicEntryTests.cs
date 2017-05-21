@@ -27,7 +27,7 @@ namespace Diary.Api.Tests.Integration
 		public async Task CreateEntry()
 		{
 			// ARRANGE
-			var input = new EntryDto
+			var input = new EntryInputDto
 			{
 				Content = "Test",
 				Timestamp = DateTime.Now.DropMilliseconds()
@@ -44,7 +44,7 @@ namespace Diary.Api.Tests.Integration
 			response.EnsureSuccessStatusCode();
 
 			var responseString = await response.Content.ReadAsStringAsync();
-			var output = JsonConvert.DeserializeObject<EntryDto>(responseString);
+			var output = JsonConvert.DeserializeObject<EntryOutputDto>(responseString);
 
 			// ASSERT
 			output.Id.Should().BeGreaterThan(0);
@@ -66,7 +66,7 @@ namespace Diary.Api.Tests.Integration
 				Timestamp = 0
 			});
 
-			var newData = new EntryDto {
+			var newData = new EntryInputDto {
 				Content = "New value",
 				Timestamp = DateTime.Now.DropMilliseconds()
 			};
@@ -82,7 +82,7 @@ namespace Diary.Api.Tests.Integration
 			response.EnsureSuccessStatusCode();
 
 			var responseString = await response.Content.ReadAsStringAsync();
-			var output = JsonConvert.DeserializeObject<EntryDto>(responseString);
+			var output = JsonConvert.DeserializeObject<EntryOutputDto>(responseString);
 
 			// ASSERT
 			output.Timestamp.ShouldBeEquivalentTo(newData.Timestamp);
@@ -98,7 +98,7 @@ namespace Diary.Api.Tests.Integration
 		public async Task GetEntry() {
 			// ARRANGE
 			var input = this._fixture.Mapper.Map<Entry>(
-				new EntryDto
+				new EntryInputDto
 				{
 					Content = "Test",
 					Timestamp = DateTime.Now.DropMilliseconds()
@@ -112,7 +112,7 @@ namespace Diary.Api.Tests.Integration
 			response.EnsureSuccessStatusCode();
 
 			var responseString = await response.Content.ReadAsStringAsync();
-			var output = JsonConvert.DeserializeObject<EntryDto>(responseString);
+			var output = JsonConvert.DeserializeObject<EntryOutputDto>(responseString);
 
 			// ASSERT
 			output.Id.ShouldBeEquivalentTo(input.Id);

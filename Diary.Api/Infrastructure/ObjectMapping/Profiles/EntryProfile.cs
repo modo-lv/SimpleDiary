@@ -12,11 +12,10 @@ namespace Diary.Api.Infrastructure.ObjectMapping.Profiles
 	{
 		public EntryProfile()
 		{
-			this.CreateMap<EntryDto, Entry>()
-				.ForMember(d => d.FilePath, mo => mo.Ignore())
+			this.CreateMap<EntryInputDto, Entry>()
+				.ForMember(d => d.FilePath, mo => mo.Ignore());
 
-				.ReverseMap()
-				.ForMember(d => d.FileData, mo => mo.Ignore());
+			this.CreateMap<Entry, EntryOutputDto>();
 		}
 	}
 }

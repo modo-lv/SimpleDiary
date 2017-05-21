@@ -11,7 +11,7 @@
 <a href="@this.Url.Action(nameof(EntriesController.New))">New</a>
 
 <ol class="entry-list">
-	@foreach (EntryDto entry in Model.Entries) {
+	@foreach (EntryOutputDto entry in Model.Entries) {
 		<li>
 			@Html.Partial("DisplayTemplates/Entry", entry)
 		</li>

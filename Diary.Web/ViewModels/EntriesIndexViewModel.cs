@@ -8,11 +8,11 @@ namespace Diary.Web.ViewModels
 {
     public class EntriesIndexViewModel
     {
-	    public IList<EntryDto> Entries { get; set; }
+	    public IList<EntryOutputDto> Entries { get; set; }
 
 	    public EntriesIndexViewModel()
 	    {
-		    this.Entries = new List<EntryDto>();
+		    this.Entries = new List<EntryOutputDto>();
 	    }
     }
 }
