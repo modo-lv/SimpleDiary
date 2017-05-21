@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using Diary.Api.Dtos;
 using Diary.Main.Core.Config;
 using Diary.Main.Domain.Entities;
@@ -21,6 +22,8 @@ namespace Diary.Api.Infrastructure.ObjectMapping.Profiles
 				.ForMember(d => d.FileUrl, mo => mo.ResolveUsing(
 					e =>
 					{
+						if (String.IsNullOrEmpty(e.FileName))
+							return null;
 						var config = DiaryConfig.ReadConfig<MainConfig>();
 						return $"~/{config.FileStorageFolder}/{e.FileName}";
 					}));

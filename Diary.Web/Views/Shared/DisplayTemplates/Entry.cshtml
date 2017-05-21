@@ -10,7 +10,7 @@
 			<a href="@this.Url.Action(nameof(EntriesController.Delete), new {Model.Id})">Delete</a>
 		</div>
 	</header>
-	<div class="content">
+	<div class="typed content">
 		@if (!String.IsNullOrEmpty(Model.FileUrl))
 		{
 			<img src="@Url.Content(Model.FileUrl)" alt="@Model.FileName"/>
