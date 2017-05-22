@@ -122,7 +122,7 @@ namespace Diary.Web.Controllers
 
 			return saveAndClose == null
 				? (IActionResult)this.View("Edit", model)
-				: this.RedirectToAction(nameof(this.Display), new {model.Id});
+				: this.RedirectToAction(nameof(this.List));
 		}
 	}
 }

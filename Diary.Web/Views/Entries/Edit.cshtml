@@ -16,9 +16,9 @@
 
 @using (Html.BeginForm(FormMethod.Post, new {enctype = "multipart/form-data" }))
 {
-	<label for="@Html.IdFor(m => m.Description)">@Localizer["Entry content"]:</label>
+	<label for="@Html.IdFor(m => m.TextContent.Content)">@Localizer["Entry content"]:</label>
 	<div>
-		@Html.SimplerTextAreaFor(m => m.Description).AddClass("typed")
+		@Html.SimplerTextAreaFor(m => m.TextContent.Content).AddClass("typed")
 	</div>
 	<div>
 		<label for="@Html.IdFor(m => m.Timestamp)">@Localizer["Entry date"]:</label>

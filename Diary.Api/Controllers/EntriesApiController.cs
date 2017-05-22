@@ -65,9 +65,18 @@ namespace Diary.Api.Controllers {
 		{
 			var fileName = input.FileContent?.FileData?.FileName;
 
-			if (fileName.IfNotNull(f => f.Intersect(Path.GetInvalidFileNameChars()).Any()))
+			if (!String.IsNullOrEmpty(fileName))
 			{
-				throw new Exception($"{fileName} contains invalid chars.");
+				input.Type = EntryType.File;
+				input.Description = input.TextContent.Content;
+				if (fileName.Intersect(Path.GetInvalidFileNameChars()).Any())
+				{
+					throw new Exception($"{fileName} contains invalid chars.");
+				}
+			}
+			else
+			{
+				input.Type = EntryType.Text;
 			}
 
 			Entry entry = await this._diaryEntryService.SaveEntryAsync(

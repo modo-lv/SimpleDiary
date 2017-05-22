@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Diary.Main.Core.Config;
 using Diary.Main.Core.Persistence;
 using Diary.Main.Domain.Entities;
@@ -19,17 +20,20 @@ namespace Diary.Main.Services
 		private readonly IFileSystem _fileSystem;
 		private readonly MainConfig _config;
 		private readonly IStreamFactory _streams;
+		private IMapper _mapper;
 
 		public DiaryEntryService(
 			DiaryDbContext dbContext,
 			IFileSystem fileSystem,
 			MainConfig config,
-			IStreamFactory streams)
+			IStreamFactory streams,
+			IMapper mapper)
 		{
 			this._dbContext = dbContext;
 			this._fileSystem = fileSystem;
 			this._config = config;
 			this._streams = streams;
+			this._mapper = mapper;
 		}
 
 		public Task<Entry> GetEntryAsync(UInt32 id) =>
@@ -56,8 +60,17 @@ namespace Diary.Main.Services
 			if (id > 0)
 			{
 				Entry existing = await this.GetEntryAsync(id);
-				existing.Timestamp = entry.Timestamp;
-				existing.Description = entry.Description;
+				if (entry.Type == EntryType.File)
+				{
+					existing.Timestamp = entry.Timestamp;
+					existing.Description = entry.Description;
+					existing.Name = entry.Name;
+				}
+				else
+				{
+					this._mapper.Map(entry, existing);
+				}
+
 				this._dbContext.Update(existing);
 				entry = existing;
 			}
