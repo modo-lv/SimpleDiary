@@ -4,5 +4,11 @@
 
 	li {
 		display: block;
+		border-radius: 0.5em;
+		border: 1px outset silver;
+	}
+
+	li + li {
+		margin-top: 0.5em;
 	}
 }

@@ -1,38 +1,56 @@
 ﻿@using Diary.Main.Domain.Entities
 @using Diary.Web.Controllers
+@using Simpler.Net.Html
 
 @model Diary.Api.Dtos.EntryDto
 
-<article class="entry">
+@{
+	// Entry CSS classes
+	var entryClasses = new HashSet<String>
+	{
+		"entry",
+		Model.Type.ToString().ToLowerInvariant()
+	};
+	if (Model.Type == EntryType.File)
+	{
+		entryClasses.Add(Model.FileContent.FileType.ToString().ToLowerInvariant());
+	}
+}
+
+<article class="@String.Join(" ", entryClasses)">
 	<header>
-		@Html.DisplayFor(m => m.Timestamp)
+		<h1>
+			@Html.DisplayFor(m => m.Timestamp, new {Format="[{0}]"})
+			@if (!String.IsNullOrEmpty(Model.Name)) {
+				@Model.Name
+			}
+		</h1>
+
 		<div class="action buttons">
 			<a href="@this.Url.Action(nameof(EntriesController.Edit), new {Model.Id})">Edit</a>
 			<a href="@this.Url.Action(nameof(EntriesController.Delete), new {Model.Id})">Delete</a>
 		</div>
 	</header>
-	<div class="typed content">
-		@if (!String.IsNullOrEmpty(Model.Name))
-		{
-			<h1>@Model.Name</h1>
-		}
-
+	<div class="content">
 		@if (Model.Type == EntryType.File && Model.FileContent?.FileType == FileEntryType.Image)
 		{
 			if (!String.IsNullOrEmpty(Model.FileContent?.FileUrl))
 			{
 				<img src="@Url.Content(Model.FileContent.FileUrl)" alt="@Model.FileContent.FileName"/>
 			}
+			if (!String.IsNullOrEmpty(Model.Description)) {
+				<p class="description">@Model.Description</p>
+			}
 		}
 		else if (Model.Type == EntryType.Text)
 		{
-			@Model.TextContent?.Content
+			foreach (var para in Model.TextContent?.Content.ToHtmlParagraphs())
+			{
+				@para
+			}
 		}
+		
 	</div>
 	<footer>
-		@if (!String.IsNullOrEmpty(Model.Description))
-		{
-			@Model.Description
-		}
 	</footer>
 </article>

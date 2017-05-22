@@ -1,4 +1,11 @@
 ﻿.typed {
-	font-family: 'Alegreya', serif;
-	font-size: 120%;
+	@include typed-font();
+}
+
+p {
+	margin: 0;
+}
+
+p + p {
+	margin-top: 1em;
 }

@@ -1,9 +1,17 @@
 ﻿@using Simpler.Net.Time
 @model DateTime?
 
+@{
+	var format = this.ViewData["Format"] as String;
+	if (String.IsNullOrEmpty(format))
+	{
+		format = "{0}";
+	}
+}
+
 @if (Model.HasValue)
 {
 	<time datetime="@Model.Value.ToIso8601HtmlString()">
-		@Model?.ToShortDateTimeString()
+		@String.Format(format, Model?.ToShortDateTimeString())
 	</time>
 }
