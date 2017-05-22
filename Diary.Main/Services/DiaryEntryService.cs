@@ -52,7 +52,7 @@ namespace Diary.Main.Services
 			{
 				Entry existing = await this.GetEntryAsync(id);
 				existing.Timestamp = entry.Timestamp;
-				existing.Content = entry.Content;
+				existing.Description = entry.Description;
 				this._dbContext.Update(existing);
 				entry = existing;
 			}
@@ -62,7 +62,7 @@ namespace Diary.Main.Services
 			}
 			await this._dbContext.SaveChangesAsync();
 
-			if (newFileContents == null)
+/*			if (newFileContents == null)
 				return entry;
 
 			// Sort out all the names and paths
@@ -114,7 +114,7 @@ namespace Diary.Main.Services
 				// Delete leftovers
 				this._fileSystem.File.Delete(newFileTempPath);
 				this._fileSystem.File.Delete(oldFileTempPath);
-			}
+			}*/
 
 			return entry;
 		}

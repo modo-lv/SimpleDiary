@@ -16,17 +16,18 @@ namespace Diary.Api.Infrastructure.ObjectMapping.Profiles
 		public EntryProfile()
 		{
 			this.CreateMap<EntryDto, Entry>()
-				.ForMember(d => d.FileName, mo => mo.Ignore())
+				//.ForMember(d => d.FileName, mo => mo.Ignore())
 				.ReverseMap()
-				.ForMember(d => d.FileData, mo => mo.Ignore())
-				.ForMember(d => d.FileUrl, mo => mo.ResolveUsing(
+				//.ForMember(d => d.FileData, mo => mo.Ignore())
+/*				.ForMember(d => d.FileUrl, mo => mo.ResolveUsing(
 					e =>
 					{
 						if (String.IsNullOrEmpty(e.FileName))
 							return null;
 						var config = DiaryConfig.ReadConfig<MainConfig>();
 						return $"~/{config.FileStorageFolder}/{e.FileName}";
-					}));
+					}))*/
+					;
 		}
 	}
 }

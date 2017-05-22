@@ -15,7 +15,7 @@
 	<header>
 		@Html.DisplayFor(m => m.Timestamp)
 	</header>
-	@Model.Content
+	@Model.Text
 	<footer>
 		<a class="button" href="@Url.Action(nameof(EntriesController.List))">@Localizer["Close"]</a>
 	</footer>

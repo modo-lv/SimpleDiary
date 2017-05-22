@@ -1,5 +1,4 @@
-﻿using System.IO;
-using Diary.Main.Core.Config;
+﻿using Diary.Main.Core.Config;
 using Diary.Main.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
