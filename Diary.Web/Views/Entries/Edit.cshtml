@@ -16,17 +16,20 @@
 
 @using (Html.BeginForm(FormMethod.Post, new {enctype = "multipart/form-data" }))
 {
-	<label for="@Html.IdFor(m => m.Text)">@Localizer["Entry content"]:</label>
+	<label for="@Html.IdFor(m => m.Description)">@Localizer["Entry content"]:</label>
 	<div>
-		@Html.SimplerTextAreaFor(m => m.Text).AddClass("typed")
+		@Html.SimplerTextAreaFor(m => m.Description).AddClass("typed")
 	</div>
 	<div>
 		<label for="@Html.IdFor(m => m.Timestamp)">@Localizer["Entry date"]:</label>
 		@Html.EditorFor(m => m.Timestamp)
 	</div>
 	<div>
-		<label for="@Html.IdFor(m => m.FileData)">@Localizer["File"]:</label>
-		<input type="file" name="@Html.NameFor(m => m.FileData)" id="@Html.IdFor(m => m.FileData)" />
+		<label for="@Html.IdFor(m => m.FileContent.FileData)">@Localizer["File"]:</label>
+		<input type="file" name="@Html.NameFor(m => m.FileContent.FileData)" id="@Html.IdFor(m => m.FileContent.FileData)" />
+		
+		<!-- Ignored, workaround for https://github.com/aspnet/Mvc/issues/4485 -->
+		<input type="hidden" name="@Html.NameFor(m => m.FileContent.FileUrl)"/>
 	</div>
 	<div>
 		<a class="button" href="@Url.Action(nameof(EntriesController.List))">@Localizer["Close"]</a>

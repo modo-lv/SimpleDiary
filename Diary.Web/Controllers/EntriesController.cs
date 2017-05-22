@@ -86,11 +86,7 @@ namespace Diary.Web.Controllers
 		[HttpPost]
 		public async Task<IActionResult> New(EntryDto model, String saveAndClose)
 		{
-			var result = await this._api.SaveEntry(new FileEntryDto()
-			{
-				Timestamp = DateTime.Now,
-				FileName = "XXX",
-			});
+			EntryDto result = await this._api.SaveEntry(model);
 
 			return saveAndClose == null
 				? (IActionResult) this.View("Edit", result)

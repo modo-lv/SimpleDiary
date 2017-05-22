@@ -33,10 +33,15 @@ namespace Diary.Main.Services
 		}
 
 		public Task<Entry> GetEntryAsync(UInt32 id) =>
-			this._dbContext.Entries.FirstOrDefaultAsync(e => e.Id == id && !e.IsDeleted);
+			this._dbContext.Entries
+				.Include(e => e.TextContent)
+				.Include(e => e.FileContent)
+				.FirstOrDefaultAsync(e => e.Id == id && !e.IsDeleted);
 
 		public async Task<IList<Entry>> GetEntriesAsync() =>
 			await this._dbContext.Entries
+				.Include(e => e.TextContent)
+				.Include(e => e.FileContent)
 				.Where(e => !e.IsDeleted)
 				.OrderByDescending(e => e.Timestamp)
 				.ToListAsync();
@@ -62,13 +67,13 @@ namespace Diary.Main.Services
 			}
 			await this._dbContext.SaveChangesAsync();
 
-/*			if (newFileContents == null)
+			if (newFileContents == null)
 				return entry;
 
 			// Sort out all the names and paths
 			newFileName = $"{entry.Id:D8}_{newFileName}";
-			var oldFileName = entry.FileName;
-			var hasOldFile = !String.IsNullOrEmpty(entry.FileName);
+			var oldFileName = entry.FileContent?.FileName;
+			var hasOldFile = !String.IsNullOrEmpty(oldFileName);
 			var newFileTempPath = this._fileSystem.Path.GetTempPath() + Guid.NewGuid() + Path.GetExtension(newFileName);
 			var oldFileTempPath = this._fileSystem.Path.GetTempPath() + Guid.NewGuid() + Path.GetExtension(oldFileName);
 			var newFilePath = SimplerPath.Combine(this._config.FileStorageDir, newFileName);
@@ -91,8 +96,14 @@ namespace Diary.Main.Services
 					{
 						// Move new file over the old and update DB
 						this._fileSystem.CreateDirectoryForFile(newFilePath);
+
+						if (hasOldFile && newFileName == oldFileName)
+							this._fileSystem.File.Delete(newFilePath);
+
 						this._fileSystem.File.Move(newFileTempPath, newFilePath);
-						entry.FileName = newFileName;
+						if (!hasOldFile)
+							entry.FileContent = new EntryFileContent();
+						entry.FileContent.FileName = newFileName;
 						this._dbContext.Entries.Update(entry);
 						await this._dbContext.SaveChangesAsync();
 						trans.Commit();
@@ -114,7 +125,7 @@ namespace Diary.Main.Services
 				// Delete leftovers
 				this._fileSystem.File.Delete(newFileTempPath);
 				this._fileSystem.File.Delete(oldFileTempPath);
-			}*/
+			}
 
 			return entry;
 		}

@@ -27,9 +27,9 @@ namespace Diary.Api.Tests.Integration
 		public async Task CreateEntry()
 		{
 			// ARRANGE
-			var input = new FileEntryDto
+			var input = new EntryDto
 			{
-				Text = "Test",
+				Description = "Test",
 				Timestamp = DateTime.Now.DropMilliseconds()
 			};
 
@@ -67,7 +67,7 @@ namespace Diary.Api.Tests.Integration
 			});
 
 			var newData = new EntryDto {
-				Text = "New value",
+				Description = "New value",
 				Timestamp = DateTime.Now.DropMilliseconds()
 			};
 
@@ -86,7 +86,7 @@ namespace Diary.Api.Tests.Integration
 
 			// ASSERT
 			output.Timestamp.ShouldBeEquivalentTo(newData.Timestamp);
-			output.Text.ShouldBeEquivalentTo(newData.Text);
+			output.Description.ShouldBeEquivalentTo(newData.Description);
 		}
 
 
@@ -100,7 +100,7 @@ namespace Diary.Api.Tests.Integration
 			var input = this._fixture.Mapper.Map<Entry>(
 				new EntryDto
 				{
-					Text = "Test",
+					Description = "Test",
 					Timestamp = DateTime.Now.DropMilliseconds()
 				});
 

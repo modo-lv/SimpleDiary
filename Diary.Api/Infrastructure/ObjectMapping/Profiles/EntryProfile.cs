@@ -3,7 +3,6 @@ using AutoMapper;
 using Diary.Api.Dtos;
 using Diary.Main.Core.Config;
 using Diary.Main.Domain.Entities;
-using Simpler.Net.Io;
 
 namespace Diary.Api.Infrastructure.ObjectMapping.Profiles
 {
@@ -15,19 +14,30 @@ namespace Diary.Api.Infrastructure.ObjectMapping.Profiles
 	{
 		public EntryProfile()
 		{
-			this.CreateMap<EntryDto, Entry>()
-				//.ForMember(d => d.FileName, mo => mo.Ignore())
+			this.CreateMap<Entry, EntryDto>()
 				.ReverseMap()
-				//.ForMember(d => d.FileData, mo => mo.Ignore())
-/*				.ForMember(d => d.FileUrl, mo => mo.ResolveUsing(
-					e =>
+				.AfterMap(
+					(dto, entry) =>
 					{
-						if (String.IsNullOrEmpty(e.FileName))
+						if (entry.Type != EntryType.Text)
+							entry.TextContent = null;
+						if (entry.Type != EntryType.File)
+							entry.FileContent = null;
+					});
+
+			this.CreateMap<EntryFileContent, EntryFileContentDto>()
+				.ForMember(d => d.FileUrl, mo => mo.ResolveUsing(
+					fileEntry =>
+					{
+						if (String.IsNullOrEmpty(fileEntry?.FileName))
 							return null;
+
 						var config = DiaryConfig.ReadConfig<MainConfig>();
-						return $"~/{config.FileStorageFolder}/{e.FileName}";
-					}))*/
-					;
+						return $"~/{config.FileStorageFolder}/{fileEntry.FileName}";
+					}));
+
+			this.CreateMap<EntryTextContent, EntryTextContentDto>()
+				.ReverseMap();
 		}
 	}
 }

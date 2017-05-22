@@ -4,13 +4,13 @@ using Microsoft.AspNetCore.Http;
 
 namespace Diary.Api.Dtos
 {
-    public class FileEntryDto : EntryDto
+    public class EntryFileContentDto : EntryFileContent
     {
 	    public IFormFile FileData { get; set; }
 
-	    /// <inheritdoc cref="Entry.FileName"/>
-	    public String FileName { get; set; }
-
-	    public String FileUrl { get; set; }
+			/// <summary>
+			/// URL to use in HTML to link to this file.
+			/// </summary>
+			public String FileUrl { get; set; }
     }
 }

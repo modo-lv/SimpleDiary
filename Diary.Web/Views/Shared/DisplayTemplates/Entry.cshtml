@@ -1,4 +1,5 @@
-﻿@using Diary.Web.Controllers
+﻿@using Diary.Main.Domain.Entities
+@using Diary.Web.Controllers
 
 @model Diary.Api.Dtos.EntryDto
 
@@ -11,10 +12,27 @@
 		</div>
 	</header>
 	<div class="typed content">
-		@if (!String.IsNullOrEmpty(Model.FileUrl))
+		@if (!String.IsNullOrEmpty(Model.Name))
 		{
-			<img src="@Url.Content(Model.FileUrl)" alt="@Model.FileName"/>
+			<h1>@Model.Name</h1>
 		}
-		@Html.DisplayFor(m => m.Text)
+
+		@if (Model.Type == EntryType.File && Model.FileContent?.FileType == FileEntryType.Image)
+		{
+			if (!String.IsNullOrEmpty(Model.FileContent?.FileUrl))
+			{
+				<img src="@Url.Content(Model.FileContent.FileUrl)" alt="@Model.FileContent.FileName"/>
+			}
+		}
+		else if (Model.Type == EntryType.Text)
+		{
+			@Model.TextContent?.Content
+		}
 	</div>
+	<footer>
+		@if (!String.IsNullOrEmpty(Model.Description))
+		{
+			@Model.Description
+		}
+	</footer>
 </article>

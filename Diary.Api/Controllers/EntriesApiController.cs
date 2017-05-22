@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Diary.Api.Dtos;
@@ -9,6 +11,7 @@ using Diary.Main.Domain.Entities;
 using Diary.Main.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Simpler.Net;
 using Simpler.Net.Io.Abstractions;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -58,12 +61,9 @@ namespace Diary.Api.Controllers {
 		/// <returns>Updated entry.</returns>
 		[HttpPost]
 		[HttpPut("{id}")]
-		public async Task<EntryDto> SaveEntry([FromBody] dynamic input, [FromRoute] UInt32 id = 0)
+		public async Task<EntryDto> SaveEntry([FromBody] EntryDto input, [FromRoute] UInt32 id = 0)
 		{
-			//var x = ((FileEntryDto) input).FileName;
-
-			return null;
-			/*var fileName = input.FileData?.FileName;
+			var fileName = input.FileContent?.FileData?.FileName;
 
 			if (fileName.IfNotNull(f => f.Intersect(Path.GetInvalidFileNameChars()).Any()))
 			{
@@ -74,10 +74,10 @@ namespace Diary.Api.Controllers {
 				this._mapper.Map<Entry>(input),
 				id,
 				fileName,
-				input.FileData?.OpenReadStream());
+				input.FileContent?.FileData?.OpenReadStream());
 
 			var output = this._mapper.Map<EntryDto>(entry);
-			return output;*/
+			return output;
 		}
 
 		/// <summary>
