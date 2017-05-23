@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Diary.Api.Dtos;
+﻿using System.Collections.Generic;
+using Diary.Main.Domain.Models;
 
 namespace Diary.Web.ViewModels
 {
     public class EntriesIndexViewModel
     {
-	    public IList<EntryDto> Entries { get; set; }
+	    public IList<EntryModel> Entries { get; set; }
 
 	    public EntriesIndexViewModel()
 	    {
-		    this.Entries = new List<EntryDto>();
+		    this.Entries = new List<EntryModel>();
 	    }
     }
 }

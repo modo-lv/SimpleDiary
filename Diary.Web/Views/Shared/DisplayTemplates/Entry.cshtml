@@ -2,13 +2,14 @@
 @using Diary.Web.Controllers
 @using Simpler.Net.Html
 
-@model Diary.Api.Dtos.EntryDto
+@model Diary.Api.Dtos.EntryModel
 
 @{
 	// Entry CSS classes
 	var entryClasses = new HashSet<String>
 	{
 		"entry",
+		"display",
 		Model.Type.ToString().ToLowerInvariant()
 	};
 	if (Model.Type == EntryType.File)
@@ -44,7 +45,7 @@
 		}
 		else if (Model.Type == EntryType.Text)
 		{
-			foreach (var para in Model.TextContent?.Content.ToHtmlParagraphs())
+			foreach (var para in Model.TextContent?.Content?.ToHtmlParagraphs())
 			{
 				@para
 			}

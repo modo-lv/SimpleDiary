@@ -1,4 +1,5 @@
 ﻿@using Diary.Api.Dtos
+@using Diary.Main.Domain.Entities
 @using Diary.Web.Controllers
 @using Microsoft.AspNetCore.Mvc.Rendering
 @using Microsoft.AspNetCore.Mvc.Localization
@@ -12,28 +13,91 @@
 	var isEdit = Model?.Id > 0;
 	this.Layout = "_Layout";
 }
-<h2>@Localizer[isEdit ? "Edit" : "Create"]</h2>
 
-@using (Html.BeginForm(FormMethod.Post, new {enctype = "multipart/form-data" }))
-{
-	<label for="@Html.IdFor(m => m.TextContent.Content)">@Localizer["Entry content"]:</label>
-	<div>
-		@Html.SimplerTextAreaFor(m => m.TextContent.Content).AddClass("typed")
-	</div>
-	<div>
-		<label for="@Html.IdFor(m => m.Timestamp)">@Localizer["Entry date"]:</label>
-		@Html.EditorFor(m => m.Timestamp)
-	</div>
-	<div>
-		<label for="@Html.IdFor(m => m.FileContent.FileData)">@Localizer["File"]:</label>
-		<input type="file" name="@Html.NameFor(m => m.FileContent.FileData)" id="@Html.IdFor(m => m.FileContent.FileData)" />
+<div class="entry editor">
+	<h2>@Localizer[isEdit ? "Edit entry" : "New entry"]</h2>
+	@using (Html.BeginForm(FormMethod.Post, new { enctype = "multipart/form-data" })) {
+		<fieldset class="common">
+			<!-- Name -->
+			<div>
+				<label for="@Html.IdFor(m => m.Name)">@Localizer["Name / title"]:</label>
+				@Html.SimplerTextBoxFor(m => m.Name)
+			</div>
+
+			<!-- Description -->
+			<div class="description">
+				<label for="@Html.IdFor(m => m.Description)">@Localizer["Description"]:</label>
+				@Html.SimplerTextAreaFor(m => m.Description)
+			</div>
+
+			<!-- Date and time -->
+			<div>
+				<label for="@Html.IdFor(m => m.Timestamp)">@Localizer["Entry date"]:</label>
+				@Html.EditorFor(m => m.Timestamp)
+			</div>
+
+			<!-- Type -->
+			<div>
+				<label for="@Html.IdFor(m => m.Type)">@Localizer["Entry type"]:</label>
+				@Html.DropDownListFor(m => m.Type, new SelectList(Enum.GetNames(typeof(EntryType))))
+			</div>
+
+		</fieldset>
+
+		<fieldset class="text content">
+			<legend>@Localizer["Text content"]</legend>
+
+			<!-- Content -->
+			<label for="@Html.IdFor(m => m.TextContent.Content)">@Localizer["Content"]:</label>
+			<div>
+				@Html.SimplerTextAreaFor(m => m.TextContent.Content).AddClass("typed")
+			</div>
+
+		</fieldset>
+
+		<fieldset class="file content">
+			<legend>@Localizer["File content"]</legend>
+
+			<!-- Upload -->
+			<div>
+				<label for="@Html.IdFor(m => m.FileContent.FileData)">@Localizer["File"]:</label>
+				<input type="file" name="@Html.NameFor(m => m.FileContent.FileData)" id="@Html.IdFor(m => m.FileContent.FileData)" />
+			</div>
 		
-		<!-- Ignored, workaround for https://github.com/aspnet/Mvc/issues/4485 -->
-		<input type="hidden" name="@Html.NameFor(m => m.FileContent.FileUrl)"/>
-	</div>
-	<div>
-		<a class="button" href="@Url.Action(nameof(EntriesController.List))">@Localizer["Close"]</a>
-		<input type="submit" name="save" value="Save"/>
-		<input type="submit" name="saveAndClose" value="Save &amp; close"/>
-	</div>
-}
+			<!-- File type -->
+			<div>
+				<label for="@Html.IdFor(m => m.FileContent.FileType)">@Localizer["File type"]:</label>
+				@Html.DropDownListFor(m => m.FileContent.FileType, new SelectList(Enum.GetNames(typeof(FileEntryType))))
+			</div>
+
+		</fieldset>
+
+		<div>
+			<a class="button" href="@Url.Action(nameof(EntriesController.List))">@Localizer["Close"]</a>
+			<input type="submit" name="save" value="Save" />
+			<input type="submit" name="saveAndClose" value="Save &amp; close" />
+		</div>
+	}
+</div>
+
+<script>
+	$(() => {
+		$("#@Html.IdFor(m => m.Type)").click((e) => {
+			var select = $(e.target);
+
+			var fieldsets = $(".entry.editor fieldset:not(.common)");
+			fieldsets.addClass("hidden");
+
+			switch (select.val()) {
+				case "@EntryType.Text":
+					fieldsets.filter(".text.content").removeClass("hidden");
+					break;
+				case "@EntryType.File":
+					fieldsets.filter(".file.content").removeClass("hidden");
+					break;
+			}
+		}).click();
+
+
+	})
+</script>

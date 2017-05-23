@@ -11,7 +11,7 @@ namespace Diary.Api.Infrastructure
 				if (cfg == null)
 					cfg = new MapperConfigurationExpression();
 
-				cfg.AddProfile<EntryProfile>();
+				cfg.AddProfile<EntryDtoMappingProfile>();
 
 		    return cfg;
 	    }

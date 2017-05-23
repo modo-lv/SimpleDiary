@@ -8,11 +8,13 @@ using Diary.Api.Dtos;
 using Diary.Main.Core.Config;
 using Diary.Main.Core.Persistence;
 using Diary.Main.Domain.Entities;
+using Diary.Main.Domain.Models;
 using Diary.Main.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Simpler.Net;
 using Simpler.Net.Io.Abstractions;
+using EntryModel = Diary.Main.Domain.Models.EntryModel;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -45,11 +47,24 @@ namespace Diary.Api.Controllers {
 		/// </summary>
 		/// <returns></returns>
 		[HttpGet]
-		public async Task<IList<EntryDto>> GetAllAsync()
+		public async Task<IList<EntryModel>> GetAllAsync()
 		{
 			var entries = await this._diaryEntryService.GetEntriesAsync();
 
-			return this._mapper.Map<List<EntryDto>>(entries);
+			return this._mapper.Map<List<EntryModel>>(entries);
+		}
+
+
+		/// <summary>
+		/// Retrieve a single diary entry.
+		/// </summary>
+		/// <param name="id"></param>
+		/// <returns></returns>
+		[HttpGet("{id}")]
+		public async Task<EntryModel> GetAsync([FromRoute] UInt32 id) {
+			Entry entry = await this._diaryEntryService.GetEntryAsync(id);
+			var dto = this._mapper.Map<EntryModel>(entry);
+			return dto;
 		}
 
 
@@ -61,45 +76,27 @@ namespace Diary.Api.Controllers {
 		/// <returns>Updated entry.</returns>
 		[HttpPost]
 		[HttpPut("{id}")]
-		public async Task<EntryDto> SaveEntry([FromBody] EntryDto input, [FromRoute] UInt32 id = 0)
+		public async Task<EntryModel> SaveEntry([FromBody] EntryDto input, [FromRoute] UInt32 id = 0)
 		{
 			var fileName = input.FileContent?.FileData?.FileName;
 
-			if (!String.IsNullOrEmpty(fileName))
+			if (input.Type == EntryType.File)
 			{
-				input.Type = EntryType.File;
-				input.Description = input.TextContent.Content;
 				if (fileName.Intersect(Path.GetInvalidFileNameChars()).Any())
 				{
 					throw new Exception($"{fileName} contains invalid chars.");
 				}
-			}
-			else
-			{
-				input.Type = EntryType.Text;
+
+				input.FileContent.IfNotNull(fc => fc.FileName = fileName);
 			}
 
 			Entry entry = await this._diaryEntryService.SaveEntryAsync(
-				this._mapper.Map<Entry>(input),
+				this._mapper.Map<EntryModel>(input),
 				id,
-				fileName,
 				input.FileContent?.FileData?.OpenReadStream());
 
-			var output = this._mapper.Map<EntryDto>(entry);
+			var output = this._mapper.Map<EntryModel>(entry);
 			return output;
-		}
-
-		/// <summary>
-		/// Retrieve a single diary entry.
-		/// </summary>
-		/// <param name="id"></param>
-		/// <returns></returns>
-		[HttpGet("{id}")]
-		public async Task<EntryDto> GetAsync([FromRoute] UInt32 id)
-		{
-			Entry entry = await this._diaryEntryService.GetEntryAsync(id);
-			var dto = this._mapper.Map<EntryDto>(entry);
-			return dto;
 		}
 
 		/// <summary>

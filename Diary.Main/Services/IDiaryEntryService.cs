@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Diary.Main.Domain.Entities;
+using Diary.Main.Domain.Models;
 
 namespace Diary.Main.Services
 {
@@ -17,9 +18,8 @@ namespace Diary.Main.Services
 	    /// </summary>
 	    /// <param name="entry">Entry data to save.</param>
 	    /// <param name="id">ID of the entry to update. If 0, a new entry will be created.</param>
-	    /// <param name="newFileName"></param>
 	    /// <param name="newFileContents"></param>
 	    /// <returns>New/updated entry.</returns>
-	    Task<Entry> SaveEntryAsync(Entry entry, UInt32 id = 0, String newFileName = null, Stream newFileContents = null);
+	    Task<Entry> SaveEntryAsync(EntryModel entry, UInt32 id = 0, Stream newFileContents = null);
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System;
 using Diary.Main.Domain.Entities;
 
-namespace Diary.Api.Dtos {
-	public abstract class EntityDtoBase
+namespace Diary.Main.Domain.Models {
+	public abstract class EntityBaseModel
 	{
 		/// <inheritdoc cref="EntityBase.Id"/>
 		public UInt32 Id { get; set; }

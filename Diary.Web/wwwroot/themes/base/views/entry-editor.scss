@@ -1,15 +1,23 @@
-﻿body {
+﻿.entry.editor {
 	display: flex;
-	margin: 0;
+	margin: auto;
 	flex-direction: column;
 	align-items: center;
-}
 
-main {
-	min-width: 10em;
+	fieldset {
+		display: flex;
+		flex-direction: column;
+	}
 
 	textarea {
 		width: 100%;
-		min-height: 20em;
+	}
+
+	.description textarea {
+		height: 5em;
+	}
+
+	.text.content textarea {
+		height: 15em;
 	}
 }

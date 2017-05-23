@@ -7,6 +7,8 @@ using AutoMapper;
 using Diary.Main.Core.Config;
 using Diary.Main.Core.Persistence;
 using Diary.Main.Domain.Entities;
+using Diary.Main.Domain.Models;
+using Diary.Main.Infrastructure.ObjectMapping;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Simpler.Net.Io;
@@ -36,108 +38,127 @@ namespace Diary.Main.Services
 			this._mapper = mapper;
 		}
 
-		public Task<Entry> GetEntryAsync(UInt32 id) =>
-			this._dbContext.Entries
-				.Include(e => e.TextContent)
-				.Include(e => e.FileContent)
-				.FirstOrDefaultAsync(e => e.Id == id && !e.IsDeleted);
+		/// <inheritdoc />
+		public async Task<Entry> GetEntryAsync(UInt32 id)
+			=>
+				await this._dbContext.Entries
+					.Include(e => e.TextContent)
+					.Include(e => e.FileContent)
+					.FirstOrDefaultAsync(e => e.Id == id && !e.IsDeleted);
 
-		public async Task<IList<Entry>> GetEntriesAsync() =>
-			await this._dbContext.Entries
-				.Include(e => e.TextContent)
-				.Include(e => e.FileContent)
-				.Where(e => !e.IsDeleted)
-				.OrderByDescending(e => e.Timestamp)
-				.ToListAsync();
+
+		/// <inheritdoc />
+		public async Task<IList<Entry>> GetEntriesAsync()
+			=>
+				await this._dbContext.Entries
+					.Include(e => e.TextContent)
+					.Include(e => e.FileContent)
+					.Where(e => !e.IsDeleted)
+					.OrderByDescending(e => e.Timestamp)
+					.ToListAsync();
+
 
 		/// <inheritdoc />
 		public async Task<Entry> SaveEntryAsync(
-			Entry entry,
+			EntryModel input,
 			UInt32 id = 0,
-			String newFileName = null,
 			Stream newFileContents = null)
 		{
+			Entry entry;
 			if (id > 0)
 			{
-				Entry existing = await this.GetEntryAsync(id);
-				if (entry.Type == EntryType.File)
-				{
-					existing.Timestamp = entry.Timestamp;
-					existing.Description = entry.Description;
-					existing.Name = entry.Name;
-				}
-				else
-				{
-					this._mapper.Map(entry, existing);
-				}
-
-				this._dbContext.Update(existing);
-				entry = existing;
+				entry = await this.GetEntryAsync(id);
+				this._mapper.Map(input, entry);
+				this._dbContext.Update(entry);
 			}
 			else
 			{
+				entry = this._mapper.Map<Entry>(input);
 				this._dbContext.Add(entry);
 			}
 			await this._dbContext.SaveChangesAsync();
 
-			if (newFileContents == null)
+			if (input.Type != EntryType.File)
 				return entry;
 
-			// Sort out all the names and paths
-			newFileName = $"{entry.Id:D8}_{newFileName}";
-			var oldFileName = entry.FileContent?.FileName;
+			var newFileName = $"{input.Id:D8}_{input.FileContent.FileName}";
+			var oldFileName = entry.FileContent.FileName;
 			var hasOldFile = !String.IsNullOrEmpty(oldFileName);
-			var newFileTempPath = this._fileSystem.Path.GetTempPath() + Guid.NewGuid() + Path.GetExtension(newFileName);
-			var oldFileTempPath = this._fileSystem.Path.GetTempPath() + Guid.NewGuid() + Path.GetExtension(oldFileName);
-			var newFilePath = SimplerPath.Combine(this._config.FileStorageDir, newFileName);
-			var oldFilePath = SimplerPath.Combine(this._config.FileStorageDir, oldFileName);
 
-			try
+			// Rename only
+			if (hasOldFile && newFileContents == null && newFileName != oldFileName)
 			{
-				// Copy new and current files to temp
-				using (Stream tempFile = this._streams.GetFileStream(newFileTempPath, FileMode.Create))
-				{
-					await newFileContents.CopyToAsync(tempFile);
+				this._fileSystem.File.Move(oldFileName, newFileName);
+				try {
+					entry.FileContent.FileName = newFileName;
+					this._dbContext.Update(entry);
+					await this._dbContext.SaveChangesAsync();
 				}
-
-				if (hasOldFile)
-					File.Copy(oldFilePath, oldFileTempPath);
-
-				using (IDbContextTransaction trans = await this._dbContext.Database.BeginTransactionAsync())
+				catch (Exception)
 				{
-					try
-					{
-						// Move new file over the old and update DB
-						this._fileSystem.CreateDirectoryForFile(newFilePath);
-
-						if (hasOldFile && newFileName == oldFileName)
-							this._fileSystem.File.Delete(newFilePath);
-
-						this._fileSystem.File.Move(newFileTempPath, newFilePath);
-						if (!hasOldFile)
-							entry.FileContent = new EntryFileContent();
-						entry.FileContent.FileName = newFileName;
-						this._dbContext.Entries.Update(entry);
-						await this._dbContext.SaveChangesAsync();
-						trans.Commit();
-
-						if (hasOldFile && newFileName != oldFileName)
-							this._fileSystem.File.Delete(oldFilePath);
-					}
-					catch (Exception)
-					{
-						// If anything fails, move the old file back and cancel DB update
-						trans.Rollback();
-						if (hasOldFile)
-							File.Move(oldFileTempPath, oldFilePath);
-						throw;
-					}
+					// In case of errors updating DB, move the file back
+					this._fileSystem.File.Move(newFileName, oldFileName);
+					throw;
 				}
-			} finally
+			}
+			// Update file
+			else if (newFileContents != null)
 			{
-				// Delete leftovers
-				this._fileSystem.File.Delete(newFileTempPath);
-				this._fileSystem.File.Delete(oldFileTempPath);
+				var newFileTempPath = 
+					this._fileSystem.Path.GetTempPath() + Guid.NewGuid() + Path.GetExtension(newFileName);
+				var oldFileTempPath = 
+					this._fileSystem.Path.GetTempPath() + Guid.NewGuid() + Path.GetExtension(oldFileName);
+				var newFilePath = SimplerPath.Combine(this._config.FileStorageDir, newFileName);
+				var oldFilePath = SimplerPath.Combine(this._config.FileStorageDir, oldFileName);
+
+				try
+				{
+					// Copy new and current files to temp
+					using (Stream tempFile = this._streams.GetFileStream(newFileTempPath, FileMode.Create))
+					{
+						await newFileContents.CopyToAsync(tempFile);
+					}
+
+					if (hasOldFile)
+						File.Copy(oldFilePath, oldFileTempPath);
+
+					using (IDbContextTransaction trans = await this._dbContext.Database.BeginTransactionAsync())
+					{
+						try
+						{
+							// Move new file over
+							this._fileSystem.CreateDirectoryForFile(newFilePath);
+							if (hasOldFile && newFileName == oldFileName)
+								this._fileSystem.File.Delete(oldFilePath);
+							this._fileSystem.File.Move(newFileTempPath, newFilePath);
+
+							// Update entry
+							if (!hasOldFile)
+								entry.FileContent = new EntryFileContent();
+							input.FileContent.FileName = newFileName;
+							this._dbContext.Entries.Update(entry);
+							await this._dbContext.SaveChangesAsync();
+							trans.Commit();
+
+							// Delete old file
+							if (hasOldFile && newFileName != oldFileName)
+								this._fileSystem.File.Delete(oldFilePath);
+						}
+						catch (Exception)
+						{
+							// If anything fails, move the old file back and cancel DB update
+							if (hasOldFile)
+								this._fileSystem.File.Move(oldFileTempPath, oldFilePath);
+							trans.Rollback();
+							throw;
+						}
+					}
+				} finally
+				{
+					// Delete leftovers
+					this._fileSystem.File.Delete(newFileTempPath);
+					this._fileSystem.File.Delete(oldFileTempPath);
+				}
 			}
 
 			return entry;

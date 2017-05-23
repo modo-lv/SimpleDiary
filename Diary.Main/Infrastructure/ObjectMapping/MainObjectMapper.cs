@@ -13,6 +13,7 @@ namespace Diary.Main.Infrastructure.ObjectMapping
 
 			cfg.AddProfile<CoreMappingProfile>();
 			cfg.AddProfile<EntityMappingProfile>();
+			cfg.AddProfile<EntryMappingProfile>();
 
 			return cfg;
 		}

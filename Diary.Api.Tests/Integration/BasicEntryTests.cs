@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Diary.Api.Dtos;
 using Diary.Main.Domain.Entities;
+using Diary.Main.Domain.Models;
 using Diary.Main.Services;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
@@ -44,7 +45,7 @@ namespace Diary.Api.Tests.Integration
 			response.EnsureSuccessStatusCode();
 
 			var responseString = await response.Content.ReadAsStringAsync();
-			var output = JsonConvert.DeserializeObject<EntryDto>(responseString);
+			var output = JsonConvert.DeserializeObject<EntryModel>(responseString);
 
 			// ASSERT
 			output.Id.Should().BeGreaterThan(0);
@@ -60,10 +61,10 @@ namespace Diary.Api.Tests.Integration
 		{
 			// ARRANGE
 			var service = this._fixture.Services.GetRequiredService<IDiaryEntryService>();
-			Entry entry = await service.SaveEntryAsync(new Entry
+			Entry entry = await service.SaveEntryAsync(new EntryModel
 			{
 				Description = "Old value",
-				Timestamp = 0
+				Timestamp = SimplerTime.UnixEpochStart.DropMilliseconds()
 			});
 
 			var newData = new EntryDto {
@@ -82,7 +83,7 @@ namespace Diary.Api.Tests.Integration
 			response.EnsureSuccessStatusCode();
 
 			var responseString = await response.Content.ReadAsStringAsync();
-			var output = JsonConvert.DeserializeObject<EntryDto>(responseString);
+			var output = JsonConvert.DeserializeObject<EntryModel>(responseString);
 
 			// ASSERT
 			output.Timestamp.ShouldBeEquivalentTo(newData.Timestamp);
@@ -98,7 +99,7 @@ namespace Diary.Api.Tests.Integration
 		public async Task GetEntry() {
 			// ARRANGE
 			var input = this._fixture.Mapper.Map<Entry>(
-				new EntryDto
+				new EntryModel
 				{
 					Description = "Test",
 					Timestamp = DateTime.Now.DropMilliseconds()
@@ -112,7 +113,7 @@ namespace Diary.Api.Tests.Integration
 			response.EnsureSuccessStatusCode();
 
 			var responseString = await response.Content.ReadAsStringAsync();
-			var output = JsonConvert.DeserializeObject<EntryDto>(responseString);
+			var output = JsonConvert.DeserializeObject<EntryModel>(responseString);
 
 			// ASSERT
 			output.Id.ShouldBeEquivalentTo(input.Id);
