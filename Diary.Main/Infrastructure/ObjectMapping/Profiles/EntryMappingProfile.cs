@@ -13,8 +13,8 @@ namespace Diary.Main.Infrastructure.ObjectMapping.Profiles
 			// Main entry
 			this.CreateMap<EntryModel, Entry>()
 				.IncludeBase<EntityBaseModel, EntityBase>()
-				.ForMember(d => d.TextContent, mo => mo.Condition(m => m.Type == EntryType.Text))
-				.ForMember(d => d.FileContent, mo => mo.Condition(m => m.Type == EntryType.File))
+				.ForMember(d => d.TextContent, mo => mo.PreCondition(m => m.Type == EntryType.Text))
+				.ForMember(d => d.FileContent, mo => mo.PreCondition(m => m.Type == EntryType.File))
 
 				.ReverseMap();
 

@@ -81,14 +81,18 @@ namespace Diary.Main.Services
 			if (input.Type != EntryType.File)
 				return entry;
 
-			var newFileName = $"{input.Id:D8}_{input.FileContent.FileName}";
+			var newFileName = String.IsNullOrEmpty(input.FileContent?.FileName)
+				? entry.FileContent.FileName
+				: $"{input.Id:D8}_{input.FileContent?.FileName}";
 			var oldFileName = entry.FileContent.FileName;
-			var hasOldFile = !String.IsNullOrEmpty(oldFileName);
+			var newFilePath = SimplerPath.Combine(this._config.FileStorageDir, newFileName);
+			var oldFilePath = SimplerPath.Combine(this._config.FileStorageDir, oldFileName);
+			var hasOldFile = !String.IsNullOrEmpty(oldFileName) && this._fileSystem.File.Exists(oldFilePath);
 
 			// Rename only
 			if (hasOldFile && newFileContents == null && newFileName != oldFileName)
 			{
-				this._fileSystem.File.Move(oldFileName, newFileName);
+				this._fileSystem.File.Move(oldFilePath, newFilePath);
 				try {
 					entry.FileContent.FileName = newFileName;
 					this._dbContext.Update(entry);
@@ -97,7 +101,7 @@ namespace Diary.Main.Services
 				catch (Exception)
 				{
 					// In case of errors updating DB, move the file back
-					this._fileSystem.File.Move(newFileName, oldFileName);
+					this._fileSystem.File.Move(newFilePath, oldFilePath);
 					throw;
 				}
 			}
@@ -108,8 +112,6 @@ namespace Diary.Main.Services
 					this._fileSystem.Path.GetTempPath() + Guid.NewGuid() + Path.GetExtension(newFileName);
 				var oldFileTempPath = 
 					this._fileSystem.Path.GetTempPath() + Guid.NewGuid() + Path.GetExtension(oldFileName);
-				var newFilePath = SimplerPath.Combine(this._config.FileStorageDir, newFileName);
-				var oldFilePath = SimplerPath.Combine(this._config.FileStorageDir, oldFileName);
 
 				try
 				{

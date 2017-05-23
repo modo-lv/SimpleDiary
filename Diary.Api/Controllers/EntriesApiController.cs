@@ -78,11 +78,11 @@ namespace Diary.Api.Controllers {
 		[HttpPut("{id}")]
 		public async Task<EntryModel> SaveEntry([FromBody] EntryDto input, [FromRoute] UInt32 id = 0)
 		{
-			var fileName = input.FileContent?.FileData?.FileName;
-
 			if (input.Type == EntryType.File)
 			{
-				if (fileName.Intersect(Path.GetInvalidFileNameChars()).Any())
+				var fileName = input.FileContent?.FileData?.FileName;
+
+				if (fileName.IfNotNull(fi => fi.Intersect(Path.GetInvalidFileNameChars()).Any()))
 				{
 					throw new Exception($"{fileName} contains invalid chars.");
 				}
