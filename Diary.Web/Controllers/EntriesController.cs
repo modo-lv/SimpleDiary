@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Diary.Api.Controllers;
 using Diary.Api.Dtos;
-using Diary.Main.Domain.Models;
 using Diary.Main.Infrastructure.ObjectMapping;
 using Diary.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -22,10 +21,7 @@ namespace Diary.Web.Controllers
 			this._api = api;
 		}
 
-		public async Task<IActionResult> Index(UInt32? id)
-		{
-			return await (id.HasValue ? this.Display(id.Value) : this.List());
-		}
+		public IActionResult Index() => this.RedirectToAction(nameof(this.List));
 
 
 		/// <summary>
@@ -41,18 +37,6 @@ namespace Diary.Web.Controllers
 			};
 
 			return this.View("List", model);
-		}
-
-		/// <summary>
-		/// View a single entry.
-		/// </summary>
-		/// <param name="id"></param>
-		/// <returns></returns>
-		[HttpGet]
-		public async Task<IActionResult> Display(UInt32 id)
-		{
-			EntryModel model = await this._api.GetAsync(id);
-			return this.View("Display", model);
 		}
 
 
@@ -88,7 +72,7 @@ namespace Diary.Web.Controllers
 		[HttpPost]
 		public async Task<IActionResult> New(EntryDto model, String saveAndClose)
 		{
-			EntryModel result = await this._api.SaveEntry(model);
+			EntryDto result = (await this._api.SaveEntry(model)).MapTo<EntryDto>(this._mapper);
 
 			return saveAndClose == null
 				? (IActionResult) this.View("Edit", result)

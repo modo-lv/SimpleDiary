@@ -27,6 +27,8 @@ namespace Diary.Web
 		// For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
 		public void ConfigureServices(IServiceCollection services)
 		{
+			DiaryCore.Init(services);
+
 			var mapperConfig = new MapperConfiguration(
 				cfg =>
 				{
@@ -41,13 +43,13 @@ namespace Diary.Web
 				.AddViewLocalization()
 				.AddApplicationPart(typeof(Api.Startup).GetTypeInfo().Assembly)
 				.AddControllersAsServices();
-
-			DiaryCore.Init(services);
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
 		{
+			DiaryCore.Startup(app.ApplicationServices);
+
 			var config = app.ApplicationServices.GetRequiredService<MainConfig>();
 
 			app.UseStaticFiles()
@@ -71,8 +73,6 @@ namespace Diary.Web
 				});
 
 			loggerFactory.AddConsole();
-
-			DiaryCore.Startup(app.ApplicationServices);
 
 			if (env.IsDevelopment())
 			{

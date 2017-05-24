@@ -2,7 +2,6 @@
 	display: flex;
 	flex-direction: column;
 	padding: $padding;
-	width: $entry-width;
 
 	header {
 		display: flex;
@@ -20,12 +19,17 @@
 
 	.content {
 		padding: $padding;
-		text-align: justify;
-		@include typed-font();
 	}
 
 	footer {
 		width: 100%;
+	}
+
+	&.text {
+		.content {
+			text-align: justify;
+			@include typed-font();
+		}
 	}
 
 	&.image.file {
@@ -37,6 +41,11 @@
 			img, .description {
 				margin: auto;
 			}
+
+			.description {
+				@include typed-font();
+			}
+
 
 			img {
 				max-height: $medium-image-max-size;

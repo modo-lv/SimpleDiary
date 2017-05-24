@@ -83,11 +83,14 @@ namespace Diary.Main.Services
 
 			var newFileName = String.IsNullOrEmpty(input.FileContent?.FileName)
 				? entry.FileContent.FileName
-				: $"{input.Id:D8}_{input.FileContent?.FileName}";
+				: $"{entry.Id:D8}_{input.FileContent?.FileName}";
 			var oldFileName = entry.FileContent.FileName;
 			var newFilePath = SimplerPath.Combine(this._config.FileStorageDir, newFileName);
-			var oldFilePath = SimplerPath.Combine(this._config.FileStorageDir, oldFileName);
-			var hasOldFile = !String.IsNullOrEmpty(oldFileName) && this._fileSystem.File.Exists(oldFilePath);
+			var hasOldFile = !String.IsNullOrEmpty(oldFileName);
+			var oldFilePath = hasOldFile
+				? SimplerPath.Combine(this._config.FileStorageDir, oldFileName)
+				: null;
+			hasOldFile = hasOldFile && this._fileSystem.File.Exists(oldFilePath);
 
 			// Rename only
 			if (hasOldFile && newFileContents == null && newFileName != oldFileName)
@@ -135,9 +138,9 @@ namespace Diary.Main.Services
 							this._fileSystem.File.Move(newFileTempPath, newFilePath);
 
 							// Update entry
-							if (!hasOldFile)
+							if (entry.FileContent == null)
 								entry.FileContent = new EntryFileContent();
-							input.FileContent.FileName = newFileName;
+							entry.FileContent.FileName = newFileName;
 							this._dbContext.Entries.Update(entry);
 							await this._dbContext.SaveChangesAsync();
 							trans.Commit();
